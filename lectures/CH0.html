@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Computers, Statistics and Computational Statistics – Computer-aided statistical analysis</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5a69534754b34dc075d7f980428dccec.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../lectures/CH0.html">Part I — Statistical foundations</a></li><li class="breadcrumb-item"><a href="../lectures/CH0.html">Ch. 0 — Computation and statistics</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Computer-aided statistical analysis</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Course overview</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part I — Statistical foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../lectures/CH0.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Ch. 0 — Computation and statistics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../lectures/CH1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 1 — Probability essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 2 — Estimation and Monte Carlo</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part II — Linear models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 3 — Linear regression</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 4 — Regression diagnostics</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 5 — Predictive performance</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part III — Selection and resampling</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 6 — Model selection</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 7 — Cross-validation and resampling</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 8 — Regularization</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 9 — Flexible regression</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part IV — GLMs and integration</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 10 — GLMs and logistic regression</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 11 — Classification</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 12 — Count regression and diagnostics</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 13 — Integration and review</span>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#from-ada-lovelace-to-monte-carlo" id="toc-from-ada-lovelace-to-monte-carlo" class="nav-link active" data-scroll-target="#from-ada-lovelace-to-monte-carlo"><span class="header-section-number">1</span> <strong>From Ada Lovelace to Monte Carlo</strong></a>
+  <ul class="collapse">
+  <li><a href="#ada-lovelace-1843-an-algorithm-before-a-computer" id="toc-ada-lovelace-1843-an-algorithm-before-a-computer" class="nav-link" data-scroll-target="#ada-lovelace-1843-an-algorithm-before-a-computer"><span class="header-section-number">1.1</span> <strong>Ada Lovelace (1843): an algorithm before a computer</strong></a></li>
+  <li><a href="#when-computers-were-people" id="toc-when-computers-were-people" class="nav-link" data-scroll-target="#when-computers-were-people"><span class="header-section-number">1.2</span> <strong>When computers were people</strong></a></li>
+  </ul></li>
+  <li><a href="#a-short-history-of-regression" id="toc-a-short-history-of-regression" class="nav-link" data-scroll-target="#a-short-history-of-regression"><span class="header-section-number">2</span> <strong>A Short History of Regression</strong></a>
+  <ul class="collapse">
+  <li><a href="#gauss-determination-of-the-orbit-of-ceres-1801" id="toc-gauss-determination-of-the-orbit-of-ceres-1801" class="nav-link" data-scroll-target="#gauss-determination-of-the-orbit-of-ceres-1801"><span class="header-section-number">2.1</span> <strong>Gauss’ determination of the orbit of Ceres (1801)</strong></a></li>
+  <li><a href="#gauss-determination-of-the-orbit-of-ceres-1801-ctn." id="toc-gauss-determination-of-the-orbit-of-ceres-1801-ctn." class="nav-link" data-scroll-target="#gauss-determination-of-the-orbit-of-ceres-1801-ctn."><span class="header-section-number">2.2</span> <strong>Gauss’ determination of the orbit of Ceres (1801) (ctn.)</strong></a></li>
+  <li><a href="#from-regression-theory-to-computers-cowles-bottleneck-1931" id="toc-from-regression-theory-to-computers-cowles-bottleneck-1931" class="nav-link" data-scroll-target="#from-regression-theory-to-computers-cowles-bottleneck-1931"><span class="header-section-number">2.3</span> <strong>From regression theory to computers: Cowles’ bottleneck (1931)</strong></a></li>
+  <li><a href="#model-selection-best-subset-selectors" id="toc-model-selection-best-subset-selectors" class="nav-link" data-scroll-target="#model-selection-best-subset-selectors"><span class="header-section-number">2.4</span> <strong>Model Selection: Best subset selectors</strong></a></li>
+  <li><a href="#shrinkage-ridge-regression" id="toc-shrinkage-ridge-regression" class="nav-link" data-scroll-target="#shrinkage-ridge-regression"><span class="header-section-number">2.5</span> <strong>Shrinkage: Ridge-Regression</strong></a></li>
+  <li><a href="#shrinkage-lasso" id="toc-shrinkage-lasso" class="nav-link" data-scroll-target="#shrinkage-lasso"><span class="header-section-number">2.6</span> <strong>Shrinkage: LASSO</strong></a></li>
+  <li><a href="#why-can-lasso-set-coefficients-exactly-to-zero" id="toc-why-can-lasso-set-coefficients-exactly-to-zero" class="nav-link" data-scroll-target="#why-can-lasso-set-coefficients-exactly-to-zero"><span class="header-section-number">2.7</span> <strong>Why can LASSO set coefficients exactly to zero?</strong></a></li>
+  <li><a href="#assessment-of-predictive-accuracy-cross-validation" id="toc-assessment-of-predictive-accuracy-cross-validation" class="nav-link" data-scroll-target="#assessment-of-predictive-accuracy-cross-validation"><span class="header-section-number">2.8</span> <strong>Assessment of predictive accuracy: cross-validation</strong></a></li>
+  </ul></li>
+  <li><a href="#what-did-computers-actually-change" id="toc-what-did-computers-actually-change" class="nav-link" data-scroll-target="#what-did-computers-actually-change"><span class="header-section-number">3</span> <strong>What did computers actually change?</strong></a>
+  <ul class="collapse">
+  <li><a href="#comparison-of-statistical-task-before-and-after-the-computer-age" id="toc-comparison-of-statistical-task-before-and-after-the-computer-age" class="nav-link" data-scroll-target="#comparison-of-statistical-task-before-and-after-the-computer-age"><span class="header-section-number">3.1</span> <strong>Comparison of statistical task before and after the Computer Age</strong></a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../lectures/CH0.html">Part I — Statistical foundations</a></li><li class="breadcrumb-item"><a href="../lectures/CH0.html">Ch. 0 — Computation and statistics</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Computers, Statistics and Computational Statistics</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><a href="../slides/Slide_CH0.html">View slides in full screen</a></p>
+<iframe class="slide-deck" src="../slides/Slide_CH0.html" width="100%" height="500" allowfullscreen="">
+</iframe>
+<section id="from-ada-lovelace-to-monte-carlo" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> <strong>From Ada Lovelace to Monte Carlo</strong></h1>
+<section id="ada-lovelace-1843-an-algorithm-before-a-computer" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="ada-lovelace-1843-an-algorithm-before-a-computer"><span class="header-section-number">1.1</span> <strong>Ada Lovelace (1843): an algorithm before a computer</strong></h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../slides/assets/ada_lovelace.jpg" class="img-fluid figure-img" style="width:95.0%"></p>
+<figcaption>Ada Lovelace with an illustration of the Analytical Engine, c.a. 1840 <a href="https://blog.sciencemuseum.org.uk/ada-lovelace-visionary-of-the-computer-age/">Science Museum</a>.</figcaption>
+</figure>
+</div>
+<p>In her <a href="https://www.gutenberg.org/files/75107/75107-h/75107-h.htm">notes to <em>Sketch of the Analytical Engine</em> (1843)</a>, Lovelace described steps for <strong>Babbage’s proposed Analytical Engine</strong>. She is often considered the first computer programmer and understood computers could go beyond calculation: “the engine might compose elaborate and scientific pieces of music of any degree of complexity or extent.”</p>
+<p>There is a podcast about her in German: <a href="https://music.amazon.de/podcasts/3b5c9134-77ea-4e24-bff6-75492fe6ebf6/episodes/780570a9-c546-4960-adf6-5e0bfdd66a34/was-bisher-geschah---geschichtspodcast-ada-lovelace-–-die-frau-die-das-programmieren-erfand">Ada Lovelace – Die Frau, die das Programmieren erfand</a></p>
+</section>
+<section id="when-computers-were-people" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="when-computers-were-people"><span class="header-section-number">1.2</span> <strong>When computers were people</strong></h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../slides/assets/human_computers.jpg" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>Human computers at work, A server farm in the 1920s: <a href="https://womenshistory.si.edu/human-computer-project">Smithsonian</a>.</figcaption>
+</figure>
+</div>
+<p>Astronomy, government, and engineering depended on large teams of <strong>human computers</strong>, many of them women. The main <strong>Bottleneck:</strong> every additional calculation cost human time.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../slides/assets/eniac_programmers.jpg" class="img-fluid figure-img" style="width:30.0%"></p>
+<figcaption>ENIAC programmers Marlyn Wescoff and Ruth Lichterman in 1946. See <a href="https://eniacprogrammers.org/">ENIAC Programmers Project</a>.</figcaption>
+</figure>
+</div>
+<p>In the 1930s–1940s, the landscape changed: The foundations of computation were formalized (e.g.&nbsp;by <a href="https://doi.org/10.1112/plms/s2-42.1.230">Turing (1936)</a>), electronic computers (e.g.&nbsp;ENIAC ) enabled fast, programmable execution. Moreover, WWII posed problems too complex for purely analytical approaches that were eventually resolved by early programmers. In particular, large-scale simulation began to shift statistics from analytical to computational.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../slides/assets/los_alamos.jpg" class="img-fluid figure-img" style="width:30.0%"></p>
+<figcaption>Stanislaw Ulam, Richard Feynman and John von Neumann. <a href="https://doi.org/10.1063/1.1699114">Metropolis et al.&nbsp;(1953)</a>.</figcaption>
+</figure>
+</div>
+<p>Stanislaw Ulam had the idea for the <strong>Monte-Carlo Methods</strong> in 1946 while playing solitaire at Los Alamos. It was developed by John von Neumann, Nicholas Metropolis, Marshall and Ariana Rosenbluth and many others; see <a href="https://doi.org/10.1080/01621459.1949.10483310">Metropolis &amp; Ulam (1949)</a> and <a href="https://doi.org/10.1063/1.1699114">Metropolis et al.&nbsp;(1953)</a>.</p>
+<p>The basic<strong>Idea:</strong> Approximate probabilities by repeated random experiments and counting frequencies.</p>
+<p>The role of Monte-Carlo methods is fundamental for approximating integrals, expectations, and probabilities.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../slides/assets/monte_carlo_pi.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:25.0%"></p>
+</figure>
+</div>
+<p>Imagine throwing points uniformly into a square. What fraction fall inside the inscribed circle?</p>
+<p><span class="math display">\[
+\widehat\pi_B = 4\,\frac{\text{points in circle}}{B}.
+\]</span></p>
+<p>The approximation improves with the <strong>number of trials</strong> — at the cost of more computation.</p>
+</section>
+</section>
+<section id="a-short-history-of-regression" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> <strong>A Short History of Regression</strong></h1>
+<section id="gauss-determination-of-the-orbit-of-ceres-1801" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="gauss-determination-of-the-orbit-of-ceres-1801"><span class="header-section-number">2.1</span> <strong>Gauss’ determination of the orbit of Ceres (1801)</strong></h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../slides/assets/Ceres.jpg" class="img-fluid figure-img" style="width:95.0%"></p>
+<figcaption>Ceres</figcaption>
+</figure>
+</div>
+<ul>
+<li><p>In 1801, the Italian astronomer <strong>Giuseppe Piazzi</strong> recorded <strong>22 observations</strong> of Ceres before it disappeared from view.</p></li>
+<li><p>Each observation gave <strong>two angles</strong> (a direction in the sky), but <strong>no distance</strong> from Earth.</p></li>
+<li><p>Gauss selected <strong>three observation dates</strong> and reconstructed an approximate orbit using celestial mechanics. His predictions helped astronomers find Ceres again in December 1801; see his later <a href="https://books.google.com/books?id=HjLOAAAAMAAJ"><em>Theoria motus</em> (1809)</a>.</p></li>
+</ul>
+</section>
+<section id="gauss-determination-of-the-orbit-of-ceres-1801-ctn." class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="gauss-determination-of-the-orbit-of-ceres-1801-ctn."><span class="header-section-number">2.2</span> <strong>Gauss’ determination of the orbit of Ceres (1801) (ctn.)</strong></h2>
+<ul>
+<li><p>The next challenge: How could one make use of all 22 observations rather than relying on just three? Because of measurement errors, the observations would generally not agree exactly with a single orbit.</p></li>
+<li><p>The method of <strong>least squares</strong> provided a systematic way to estimate the best-fitting orbital parameters. <a href="https://doi.org/10.3931/e-rara-35115">Legendre (1805)</a> first published the method; <a href="https://books.google.com/books?id=HjLOAAAAMAAJ">Gauss (1809)</a> gave it a probabilistic foundation and <a href="https://books.google.com/books?id=hrZQAAAAcAAJ">Gauss (1823)</a> established its minimum-variance property for linear unbiased estimation.</p></li>
+</ul>
+<p><small>Source: <a href="https://www.nasa.gov/wp-content/uploads/2025/07/a-history-of-near-earth-object-research-sp-4235.pdf">NASA, <em>A History of Near-Earth Objects Research</em></a>.</small></p>
+</section>
+<section id="from-regression-theory-to-computers-cowles-bottleneck-1931" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="from-regression-theory-to-computers-cowles-bottleneck-1931"><span class="header-section-number">2.3</span> <strong>From regression theory to computers: Cowles’ bottleneck (1931)</strong></h2>
+<p>Much progress was made in the subsequent century:</p>
+<ul>
+<li><p><strong><a href="https://doi.org/10.1038/015492a0">Galton (1877)</a> and <a href="https://doi.org/10.2307/2841583">Galton (1886)</a>:</strong> Regression towards the mean in heredity data.</p></li>
+<li><p><strong><a href="https://doi.org/10.1098/rsta.1896.0007">Pearson (1896)</a>:</strong> Correlation and multiple regression.</p></li>
+<li><p><strong><a href="https://doi.org/10.1098/rsta.1922.0009">Fisher (1922)</a>:</strong> Connected regression with the classical theory of observational errors.</p></li>
+<li><p>Computationally, before WWII the calculation of least squares estimators became a bottleneck in the context of many data and many covariates.</p>
+<ul>
+<li>for instance, in 1931 <a href="https://cowles.yale.edu/archives/people/cowles">Alfred Cowles</a> proposed economic regressions involving <strong>thousands of observations</strong> and <strong>20–30 explanatory variables</strong>, that were back in the days too expensive for the available human computing labs.</li>
+</ul></li>
+<li><p><strong>1955:</strong> <a href="https://www.bitsavers.org/pdf/ibm/650/programLibrary/Additional_Abstracts_of_IBM_650_Programs_Mar57.pdf">Arthur Cohen’s IBM 650 program</a> automated multiple-regression calculations using a punched-card system which could eventually solve linear least squares problems with up to 10.000 observations and 33 covariates.</p></li>
+</ul>
+</section>
+<section id="model-selection-best-subset-selectors" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="model-selection-best-subset-selectors"><span class="header-section-number">2.4</span> <strong>Model Selection: Best subset selectors</strong></h2>
+<ul>
+<li><p>Model selection (e.g.&nbsp;which predictors should enter the model?) remained a computational difficult problem: With <span class="math inline">\(p\)</span> candidates there are <span class="math inline">\(2^p\)</span> subsets — <strong>1,048,576 at <span class="math inline">\(p=20\)</span></strong>.</p></li>
+<li><p>Early algorithms: <a href="https://cir.nii.ac.jp/crid/1570009749670334592?lang=en">Efroymson (1960)</a> developed computational procedures for stepwise regression; <a href="https://doi.org/10.1080/00401706.1966.10490322">Gorman &amp; Toman (1966)</a> and <a href="https://doi.org/10.1080/00401706.1967.10490502">Hocking &amp; Leslie (1967)</a> proposed methods for identifying promising subsets. <a href="https://doi.org/10.1080/00401706.1974.10489231">Furnival &amp; Wilson (1974)</a> introduced Leaps and Bounds, making best-subset search substantially more efficient.</p></li>
+<li><p>However, even with these algorithms, in the context of many covariates computational bottlenecks exist (even today).</p></li>
+<li><p>Moreover, even if we can identify the best-fitting subset, small changes in the data may lead to very different selected models and coefficient estimates.</p></li>
+</ul>
+</section>
+<section id="shrinkage-ridge-regression" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="shrinkage-ridge-regression"><span class="header-section-number">2.5</span> <strong>Shrinkage: Ridge-Regression</strong></h2>
+<ul>
+<li>Shrinkage estimation: Rather than choosing variables exclusively by inclusion or exclusion, <a href="https://doi.org/10.1080/00401706.1970.10488634">Hoerl &amp; Kennard (1970)</a> proposed ridge regression, deliberately introducing bias to reduce estimation variance and improve stability.</li>
+</ul>
+<p><span class="math display">\[
+\widehat\beta_{\lambda}
+= \operatorname{argmin}_{\beta}
+\left\{\lVert Y-X\beta\rVert_2^2 + \lambda\lVert\beta\rVert_2^2\right\}.
+\]</span></p>
+</section>
+<section id="shrinkage-lasso" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="shrinkage-lasso"><span class="header-section-number">2.6</span> <strong>Shrinkage: LASSO</strong></h2>
+<ul>
+<li>Combining shrinkage and selection: <a href="https://doi.org/10.1111/j.2517-6161.1996.tb02080.x">Tibshirani (1996)</a> introduced the lasso, which shrinks coefficients and can set some of them exactly to zero.</li>
+</ul>
+<p><span class="math display">\[
+\widehat\beta_{\lambda}
+= \operatorname{argmin}_{\beta}
+\left\{\lVert Y-X\beta\rVert_2^2 + \lambda\lVert\beta\rVert_1\right\}.
+\]</span></p>
+<ul>
+<li>The central idea: Good estimation is not necessarily about fitting the observed data as closely as possible, but about obtaining stable models that generalise to new observations.</li>
+</ul>
+</section>
+<section id="why-can-lasso-set-coefficients-exactly-to-zero" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="why-can-lasso-set-coefficients-exactly-to-zero"><span class="header-section-number">2.7</span> <strong>Why can LASSO set coefficients exactly to zero?</strong></h2>
+<div id="a866cc59" class="cell" data-fig-height="5.5" data-fig-width="12" data-execution_count="1">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="CH0_files/figure-html/cell-2-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="851" height="498"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Geometric intuition:</strong> The red curves are RSS contours, <span class="math inline">\(\times\)</span> marks ordinary least squares, and <span class="math inline">\(\bullet\)</span> marks the constrained optimum. The <span class="math inline">\(L_1\)</span> diamond has corners on the axes, allowing <strong>exact zeros</strong>; the smooth <span class="math inline">\(L_2\)</span> circle generally gives <strong>nonzero, shrunken</strong> coefficients.</p>
+</section>
+<section id="assessment-of-predictive-accuracy-cross-validation" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="assessment-of-predictive-accuracy-cross-validation"><span class="header-section-number">2.8</span> <strong>Assessment of predictive accuracy: cross-validation</strong></h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../slides/assets/grace_wahba.jpg" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>Source: <a href="https://news.wisc.edu/breaking-ground-with-grace/">Breaking Grounds with Grace</a>.</figcaption>
+</figure>
+</div>
+<ul>
+<li><p>A model that fits the observed data well may predict new observations poorly. Training error is typically too optimistic.</p></li>
+<li><p><strong>Cross-validation (CV):</strong> Divide the data into <span class="math inline">\(K\)</span> folds. Refit the model on <span class="math inline">\(K-1\)</span> folds, evaluate predictions on the held-out fold, and repeat.</p></li>
+</ul>
+<p><span class="math display">\[
+\widehat{\mathrm{CV}}(\lambda)
+=\frac{1}{n}\sum_{k=1}^{K}\sum_{i\in I_k}
+\bigl(Y_i-\widehat f_{\lambda}^{(-k)}(X_i)\bigr)^2.
+\]</span></p>
+<ul>
+<li><strong>Historical milestones:</strong> <a href="https://doi.org/10.1111/j.2517-6161.1974.tb00994.x">Stone (1974)</a>; <a href="https://doi.org/10.1080/03610927508827223">Wahba &amp; Wold (1975)</a>; <a href="https://doi.org/10.1080/00401706.1979.10489751">Golub, Heath &amp; Wahba (1979)</a> and many more.</li>
+</ul>
+<p><small>An English Interview on Grace Wahba’s contributions <a href="https://statsandstories.net/methods/grace-wahba">Stats + Stories Episode 372</a>.</small></p>
+</section>
+</section>
+<section id="what-did-computers-actually-change" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> <strong>What did computers actually change?</strong></h1>
+<section id="comparison-of-statistical-task-before-and-after-the-computer-age" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="comparison-of-statistical-task-before-and-after-the-computer-age"><span class="header-section-number">3.1</span> <strong>Comparison of statistical task before and after the Computer Age</strong></h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Earlier</th>
+<th style="text-align: left;">With programmable computation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Fit a small number of models</td>
+<td style="text-align: left;">Compare many possible models</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Choose complexity by judgement or limited calculations</td>
+<td style="text-align: left;">Fit penalised models over many tuning values</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Assess predictive accuracy on a small scale</td>
+<td style="text-align: left;">Repeat train/test splits and cross-validation</td>
+</tr>
+</tbody>
+</table>
+<p>None of these <strong>questions</strong> was invented by the computer. It made their <strong>systematic investigation</strong> feasible. We will learn about that in this course.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
