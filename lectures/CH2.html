@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Estimators, Sampling Distributions, and Monte Carlo Experiments – Computer-aided statistical analysis</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5a69534754b34dc075d7f980428dccec.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../lectures/CH0.html">Part I — Statistical foundations</a></li><li class="breadcrumb-item"><a href="../lectures/CH2.html">Ch. 2 — Estimation and Monte Carlo</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Computer-aided statistical analysis</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Course overview</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part I — Statistical foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../lectures/CH0.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 0 — Computation and statistics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../lectures/CH1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 1 — Probability essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../lectures/CH2.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Ch. 2 — Estimation and Monte Carlo</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part II — Linear models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 3 — Linear regression</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 4 — Regression diagnostics</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 5 — Predictive performance</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part III — Selection and resampling</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 6 — Model selection</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 7 — Cross-validation and resampling</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 8 — Regularization</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 9 — Flexible regression</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part IV — GLMs and integration</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 10 — GLMs and logistic regression</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 11 — Classification</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 12 — Count regression and diagnostics</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 13 — Integration and review</span>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link active" data-scroll-target="#learning-goals">Learning goals</a></li>
+  <li><a href="#from-a-random-sample-to-an-estimator" id="toc-from-a-random-sample-to-an-estimator" class="nav-link" data-scroll-target="#from-a-random-sample-to-an-estimator"><span class="header-section-number">1</span> From a random sample to an estimator</a>
+  <ul class="collapse">
+  <li><a href="#parameters-estimators-and-estimates" id="toc-parameters-estimators-and-estimates" class="nav-link" data-scroll-target="#parameters-estimators-and-estimates"><span class="header-section-number">1.1</span> Parameters, estimators, and estimates</a></li>
+  <li><a href="#the-sampling-distribution" id="toc-the-sampling-distribution" class="nav-link" data-scroll-target="#the-sampling-distribution"><span class="header-section-number">1.2</span> The sampling distribution</a>
+  <ul class="collapse">
+  <li><a href="#experiment-1-draw-many-sample-means" id="toc-experiment-1-draw-many-sample-means" class="nav-link" data-scroll-target="#experiment-1-draw-many-sample-means"><span class="header-section-number">1.2.1</span> Experiment 1: draw many sample means</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#assessing-an-estimator-bias-variance-and-mse" id="toc-assessing-an-estimator-bias-variance-and-mse" class="nav-link" data-scroll-target="#assessing-an-estimator-bias-variance-and-mse"><span class="header-section-number">2</span> Assessing an estimator: bias, variance, and MSE</a>
+  <ul class="collapse">
+  <li><a href="#bias-and-unbiasedness" id="toc-bias-and-unbiasedness" class="nav-link" data-scroll-target="#bias-and-unbiasedness"><span class="header-section-number">2.1</span> Bias and unbiasedness</a></li>
+  <li><a href="#why-variance-matters-too" id="toc-why-variance-matters-too" class="nav-link" data-scroll-target="#why-variance-matters-too"><span class="header-section-number">2.2</span> Why variance matters, too</a></li>
+  <li><a href="#mean-squared-error-and-its-decomposition" id="toc-mean-squared-error-and-its-decomposition" class="nav-link" data-scroll-target="#mean-squared-error-and-its-decomposition"><span class="header-section-number">2.3</span> Mean squared error and its decomposition</a>
+  <ul class="collapse">
+  <li><a href="#experiment-2-compare-estimators-for-the-sample-variances" id="toc-experiment-2-compare-estimators-for-the-sample-variances" class="nav-link" data-scroll-target="#experiment-2-compare-estimators-for-the-sample-variances"><span class="header-section-number">2.3.1</span> Experiment 2: compare estimators for the sample variances</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#consistency-and-convergence-rates" id="toc-consistency-and-convergence-rates" class="nav-link" data-scroll-target="#consistency-and-convergence-rates"><span class="header-section-number">3</span> Consistency and convergence rates</a>
+  <ul class="collapse">
+  <li><a href="#consistency-what-happens-with-more-data" id="toc-consistency-what-happens-with-more-data" class="nav-link" data-scroll-target="#consistency-what-happens-with-more-data"><span class="header-section-number">3.1</span> Consistency: what happens with more data?</a>
+  <ul class="collapse">
+  <li><a href="#experiment-3-normal-and-pareto-sample-mean-paths" id="toc-experiment-3-normal-and-pareto-sample-mean-paths" class="nav-link" data-scroll-target="#experiment-3-normal-and-pareto-sample-mean-paths"><span class="header-section-number">3.1.1</span> Experiment 3: normal and Pareto sample-mean paths</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../lectures/CH0.html">Part I — Statistical foundations</a></li><li class="breadcrumb-item"><a href="../lectures/CH2.html">Ch. 2 — Estimation and Monte Carlo</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Estimators, Sampling Distributions, and Monte Carlo Experiments</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="learning-goals" class="level1 unnumbered">
+<h1 class="unnumbered">Learning goals</h1>
+<p>After this chapter, you should be able to:</p>
+<ul>
+<li>distinguish a statistical <strong>parameter</strong>, an <strong>estimator</strong>, and an observed <strong>estimate</strong>;</li>
+<li>describe an estimator’s <strong>sampling distribution</strong> and interpret its <strong>standard error</strong>;</li>
+<li>calculate and interpret <strong>bias</strong>, <strong>variance</strong>, <strong>mean squared error (MSE)</strong>, and <strong>root mean squared error (RMSE)</strong>;</li>
+<li>explain why an unbiased estimator need not have the smallest MSE;</li>
+<li>establish <strong>consistency</strong> for basic estimators and describe the role of moment assumptions;</li>
+<li>interpret the <span class="math inline">\(n^{-1/2}\)</span> rate and asymptotic normality of the sample mean;</li>
+<li>design reproducible <strong>Monte Carlo experiments</strong>, distinguish sample size <span class="math inline">\(n\)</span> from the number of repetitions <span class="math inline">\(B\)</span>, and quantify Monte Carlo uncertainty;</li>
+<li>investigate the finite-sample behavior of estimators and confidence intervals using Python.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="How to use this chapter">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>How to use this chapter
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Chapter 1 introduced the law of large numbers (LLN), the central limit theorem (CLT), and modes of convergence. Here we apply these tools to <strong>statistics computed from data</strong>. Before executing a simulation, write down what the theory predicts. After running it, distinguish what is a mathematical statement from what is only an approximation produced by finitely many simulated samples. As elsewhere in the course, understanding the statistics matters more than memorizing the Python syntax.</p>
+</div>
+</div>
+<p><strong>Reading:</strong> Wasserman (2004), <em>All of Statistics</em>, selected material from Chapters 6 and 9 (statistical inference and estimation). See the <a href="https://egrcc.github.io/docs/math/all-of-statistics.pdf">online book</a>. The theoretical exposition also adapts and translates Sections 2.1–2.5 of Dennis Schroers’s German lecture notes <em>Nichtparametrische Statistik</em> (University of Bonn, 2023). The Monte Carlo experiments are new and developed for this course.</p>
+<p><strong>This week’s plan:</strong> Monday (26 October): estimators, sampling distributions, bias, variance, MSE, and consistency. Wednesday (28 October): asymptotic approximations, Monte Carlo design, and the coding lab.</p>
+</section>
+<section id="from-a-random-sample-to-an-estimator" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> From a random sample to an estimator</h1>
+<section id="parameters-estimators-and-estimates" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="parameters-estimators-and-estimates"><span class="header-section-number">1.1</span> Parameters, estimators, and estimates</h2>
+<p>Suppose we observe a <strong>random sample</strong> <span class="math inline">\(X_1,\ldots,X_n\)</span> of independent, identically distributed (i.i.d.) random variables with common but generally unknown distribution <span class="math inline">\(F\)</span>. We write <span class="math inline">\(x_1,\ldots,x_n\)</span> when referring to the numerical values that have actually been observed.</p>
+<p>A <strong>parameter</strong> <span class="math inline">\(\theta=\theta(F)\)</span> is a characteristic of the unknown distribution. Examples include its mean <span class="math inline">\(\mu=\mathbb E[X_1]\)</span>, variance <span class="math inline">\(\sigma^2=\operatorname{Var}(X_1)\)</span>, or a population quantile. Our goal is to use observed data to learn about <span class="math inline">\(\theta\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Definition: estimator and estimate">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Definition: estimator and estimate
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>An <strong>estimator</strong> (or <strong>estimation statistic</strong>) is a (measurable) function of the sample,</p>
+<p><span class="math display">\[
+\widehat\theta_n=g_n(X_1,\ldots,X_n).
+\]</span></p>
+<p>Because the inputs are random, <span class="math inline">\(\widehat\theta_n\)</span> is itself a random variable. After observing <span class="math inline">\(x_1,\ldots,x_n\)</span>, the number <span class="math inline">\(g_n(x_1,\ldots,x_n)\)</span> is the <strong>estimate</strong> (or <em>realized value</em>) of the estimator.</p>
+</div>
+</div>
+<p>In practice we often use the same symbol <span class="math inline">\(\widehat\theta_n\)</span> for the function and the resulting random variable, while <span class="math inline">\(\widehat\theta_{\mathrm{obs}}\)</span> or a lowercase symbol denotes its observed value. This distinction is essential when we discuss probabilities or expectations of estimators.</p>
+<p><strong>Example: the sample mean.</strong> The natural estimator of <span class="math inline">\(\mu\)</span> is</p>
+<p><span class="math display">\[
+\overline X_n=\frac{1}{n}\sum_{i=1}^n X_i,
+\qquad
+\overline x_n=\frac{1}{n}\sum_{i=1}^n x_i.
+\]</span></p>
+<p><strong>Example: the sample variance.</strong> There are two familiar normalizations,</p>
+<p><span class="math display">\[
+\widetilde S_n^2=\frac{1}{n}\sum_{i=1}^n(X_i-\overline X_n)^2,
+\qquad
+S_n^2=\frac{1}{n-1}\sum_{i=1}^n(X_i-\overline X_n)^2,
+\quad n\geq2.
+\]</span></p>
+<p>Both estimate the population variance <span class="math inline">\(\sigma^2\)</span>, but they have different finite-sample properties. We will see why.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Exercise 1: what is random?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Exercise 1: what is random?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A sample of five measurements is <span class="math inline">\(x=(2,4,4,5,10)\)</span>. Calculate <span class="math inline">\(\overline x_5\)</span>, <span class="math inline">\(\widetilde s_5^2\)</span>, and <span class="math inline">\(s_5^2\)</span>. Which of these are realized estimates, and which mathematical expressions would be random variables <em>before</em> collecting the measurements?</p>
+</div>
+</div>
+</section>
+<section id="the-sampling-distribution" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="the-sampling-distribution"><span class="header-section-number">1.2</span> The sampling distribution</h2>
+<p>Imagine repeatedly drawing <em>new</em> independent samples of the same size <span class="math inline">\(n\)</span> from the same population. Each sample will usually produce a different estimate. The probability distribution of these possible values is the <strong>sampling distribution</strong> of <span class="math inline">\(\widehat\theta_n\)</span>.</p>
+<p>This is not the distribution of a single observation <span class="math inline">\(X_i\)</span>. It is the distribution of a function of <span class="math inline">\(n\)</span> observations. The sampling distribution tells us how much an estimation procedure fluctuates from sample to sample.</p>
+<p>For i.i.d. observations with finite mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(0&lt;\sigma^2&lt;\infty\)</span>,</p>
+<p><span class="math display">\[
+\mathbb E[\overline X_n]=\mu,
+\qquad
+\operatorname{Var}(\overline X_n)=\frac{\sigma^2}{n}.
+\]</span></p>
+<p>If <span class="math inline">\(X_i\sim N(\mu,\sigma^2)\)</span>, then <em>exactly</em>, for every <span class="math inline">\(n\geq1\)</span>,</p>
+<p><span class="math display">\[
+\overline X_n\sim N\!\left(\mu,\frac{\sigma^2}{n}\right).
+\]</span></p>
+<p>The <strong>standard error</strong> of a statistic is the standard deviation of its sampling distribution:</p>
+<p><span class="math display">\[
+\operatorname{SE}(\widehat\theta_n)
+=\sqrt{\operatorname{Var}(\widehat\theta_n)}.
+\]</span></p>
+<p>For the sample mean, <span class="math inline">\(\operatorname{SE}(\overline X_n)=\sigma/\sqrt n\)</span>. When <span class="math inline">\(\sigma\)</span> is unknown, <span class="math inline">\(S_n/\sqrt n\)</span> is a common <em>estimated</em> standard error. A standard error measures variability across hypothetical samples; it is <strong>not</strong> the standard deviation of the individual data points.</p>
+<section id="experiment-1-draw-many-sample-means" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="experiment-1-draw-many-sample-means"><span class="header-section-number">1.2.1</span> Experiment 1: draw many sample means</h3>
+<p>We generate <span class="math inline">\(B=8{,}000\)</span> independent samples from <span class="math inline">\(N(3,1)\)</span> for several sample sizes. Each row of the simulated array is one sample. We compare the resulting sampling distributions with their exact normal densities.</p>
+<div id="cell-fig-sampling-means" class="cell" data-fig-height="3.2" data-fig-width="9" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>mu <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>sigma <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> <span class="dv">8000</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>sample_sizes <span class="op">=</span> [<span class="dv">5</span>, <span class="dv">30</span>, <span class="dv">100</span>]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">3</span>))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>):</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> sample_sizes[i]</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Simulate sample means</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    samples <span class="op">=</span> rng.normal(mu, sigma, size<span class="op">=</span>(B, n))</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    means <span class="op">=</span> samples.mean(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Histogram</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    axes[i].hist(means, bins<span class="op">=</span><span class="dv">40</span>, density<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Theoretical normal distribution</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> np.linspace(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">400</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> stats.norm.pdf(x, mu, sigma <span class="op">/</span> np.sqrt(n))</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    axes[i].plot(x, y, color<span class="op">=</span><span class="st">"black"</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># True population mean</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    axes[i].axvline(mu, color<span class="op">=</span><span class="st">"black"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    axes[i].set_title(<span class="ss">f"n = </span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    axes[i].set_xlabel(<span class="st">"Sample mean"</span>)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">"Density"</span>)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="fig-sampling-means" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sampling-means-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="CH2_files/figure-html/fig-sampling-means-output-1.png" width="853" height="276" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sampling-means-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Sampling distributions of the mean under normal sampling. Each histogram uses 8,000 independent samples; the black curve is the exact sampling density.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Increasing <span class="math inline">\(n\)</span> makes the distribution of the estimator more concentrated around the parameter. Increasing <span class="math inline">\(B\)</span>, by contrast, only makes our <em>picture of that distribution</em> more accurate; it does not make the estimator itself more precise.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Two different sample sizes">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Two different sample sizes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><span class="math inline">\(n\)</span>: observations in <strong>one</strong> random sample. Changing <span class="math inline">\(n\)</span> changes the estimator’s sampling distribution and generally its statistical accuracy.</li>
+<li><span class="math inline">\(B\)</span>: independently repeated samples in the <strong>computer experiment</strong>. Changing <span class="math inline">\(B\)</span> changes the accuracy of our Monte Carlo approximation to the sampling distribution.</li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="assessing-an-estimator-bias-variance-and-mse" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Assessing an estimator: bias, variance, and MSE</h1>
+<section id="bias-and-unbiasedness" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="bias-and-unbiasedness"><span class="header-section-number">2.1</span> Bias and unbiasedness</h2>
+<p>There are often several possible estimators for the same parameter. To assess their performance, we first ask whether an estimator tends systematically to be above or below its target.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Definition: bias">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Definition: bias
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <strong>bias</strong> of an estimator <span class="math inline">\(\widehat\theta_n\)</span> for <span class="math inline">\(\theta\)</span> is</p>
+<p><span class="math display">\[
+\operatorname{Bias}(\widehat\theta_n;\theta)
+=\mathbb E[\widehat\theta_n]-\theta,
+\]</span></p>
+<p>provided the expectation exists. The estimator is <strong>unbiased</strong> if its bias is zero for every parameter value in the model. It is <strong>asymptotically unbiased</strong> if <span class="math inline">\(\operatorname{Bias}(\widehat\theta_n;\theta)\to0\)</span> as <span class="math inline">\(n\to\infty\)</span> for each fixed <span class="math inline">\(\theta\)</span>.</p>
+</div>
+</div>
+<p>The sample mean is unbiased whenever <span class="math inline">\(\mu=\mathbb E[X_1]\)</span> exists:</p>
+<p><span class="math display">\[
+\mathbb E[\overline X_n]
+=\frac1n\sum_{i=1}^n\mathbb E[X_i]=\mu.
+\]</span></p>
+<p>Unbiasedness is a property of the <em>procedure over repeated sampling</em>. It does not mean that an estimate from one particular sample must equal the true value.</p>
+</section>
+<section id="why-variance-matters-too" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="why-variance-matters-too"><span class="header-section-number">2.2</span> Why variance matters, too</h2>
+<p>An estimator can be unbiased yet fluctuate considerably between samples. Conversely, an estimator can be somewhat biased but vary much less. The relevant distinction is between the <strong>center</strong> of its sampling distribution and its <strong>spread</strong>.</p>
+<div id="cell-fig-bias-variance-target" class="cell" data-fig-height="3" data-fig-width="9" data-execution_count="3">
+<div class="cell-output cell-output-display">
+<div id="fig-bias-variance-target" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bias-variance-target-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="CH2_files/figure-html/fig-bias-variance-target-output-1.png" width="837" height="291" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bias-variance-target-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: A target analogy for estimators: low bias and low variability; low bias and high variability; nonzero bias and low variability.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="mean-squared-error-and-its-decomposition" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="mean-squared-error-and-its-decomposition"><span class="header-section-number">2.3</span> Mean squared error and its decomposition</h2>
+<p>Variance measures deviations from an estimator’s <em>own expectation</em>. Usually we care instead about deviations from the <em>unknown parameter</em>. This leads to the <strong>mean squared error</strong>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Definition: mean squared error">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Definition: mean squared error
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For an estimator with a finite second moment,</p>
+<p><span class="math display">\[
+\operatorname{MSE}(\widehat\theta_n;\theta)
+=\mathbb E\!\left[(\widehat\theta_n-\theta)^2\right].
+\]</span></p>
+<p>Its square root is the <strong>root mean squared error</strong>, <span class="math inline">\(\operatorname{RMSE}(\widehat\theta_n)=\sqrt{\operatorname{MSE}(\widehat\theta_n)}\)</span>. The RMSE has the same physical units as <span class="math inline">\(\theta\)</span>.</p>
+</div>
+</div>
+<p>Add and subtract <span class="math inline">\(\mathbb E[\widehat\theta_n]\)</span> inside the square. Because the centered cross-term has expectation zero,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\operatorname{MSE}(\widehat\theta_n;\theta)
+&amp;=\mathbb E\left[\left\{\widehat\theta_n-\mathbb E[\widehat\theta_n]
++\mathbb E[\widehat\theta_n]-\theta\right\}^2\right]\\
+&amp;=\operatorname{Var}(\widehat\theta_n)
++\left\{\operatorname{Bias}(\widehat\theta_n;\theta)\right\}^2.
+\end{aligned}
+\]</span></p>
+<p>This <strong>bias–variance decomposition</strong> is a central theme of statistical estimation. In particular, when the estimator is unbiased, its MSE equals its variance. The decomposition also explains why having the smallest bias is not by itself a guarantee of good estimation.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Exercise 2: establish the identity">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Exercise 2: establish the identity
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Expand the square in the display above, identify the vanishing cross-term, and explain why the MSE is always at least the squared bias.</p>
+</div>
+</div>
+<section id="experiment-2-compare-estimators-for-the-sample-variances" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="experiment-2-compare-estimators-for-the-sample-variances"><span class="header-section-number">2.3.1</span> Experiment 2: compare estimators for the sample variances</h3>
+<p>Let <span class="math inline">\(X_1,\ldots,X_n\)</span> be i.i.d. with finite variance <span class="math inline">\(\sigma^2\)</span>. Recall</p>
+<p><span class="math display">\[
+\widetilde S_n^2=\frac{1}{n}\sum_{i=1}^n(X_i-\overline X_n)^2,
+\qquad
+S_n^2=\frac{1}{n-1}\sum_{i=1}^n(X_i-\overline X_n)^2.
+\]</span></p>
+<p>Take <span class="math inline">\(X_i\sim N(0,2^2)\)</span>, so the parameter is <span class="math inline">\(\sigma^2=4\)</span>. We simulate the two estimators on <em>the same samples</em>, which makes their comparison less affected by Monte Carlo noise.</p>
+<div class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sigma2, B <span class="op">=</span> <span class="fl">4.0</span>, <span class="dv">20_000</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> []</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n <span class="kw">in</span> [<span class="dv">5</span>, <span class="dv">20</span>, <span class="dv">100</span>]:</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> rng.normal(<span class="dv">0</span>, np.sqrt(sigma2), size<span class="op">=</span>(B, n))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    estimates <span class="op">=</span> {<span class="st">"Divisor n"</span>: x.var(axis<span class="op">=</span><span class="dv">1</span>, ddof<span class="op">=</span><span class="dv">0</span>),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Divisor n-1"</span>: x.var(axis<span class="op">=</span><span class="dv">1</span>, ddof<span class="op">=</span><span class="dv">1</span>)}</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> name, values <span class="kw">in</span> estimates.items():</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        theory_bias <span class="op">=</span> <span class="op">-</span>sigma2 <span class="op">/</span> n <span class="cf">if</span> name <span class="op">==</span> <span class="st">"Divisor n"</span> <span class="cf">else</span> <span class="fl">0.0</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        theory_mse <span class="op">=</span> ((<span class="dv">2</span><span class="op">*</span>n <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> sigma2<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> n<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                      <span class="cf">if</span> name <span class="op">==</span> <span class="st">"Divisor n"</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                      <span class="cf">else</span> <span class="dv">2</span> <span class="op">*</span> sigma2<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> (n <span class="op">-</span> <span class="dv">1</span>))</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        rows.append({<span class="st">"n"</span>: n, <span class="st">"Estimator"</span>: name,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"MC bias"</span>: np.mean(values <span class="op">-</span> sigma2),</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"Theory bias"</span>: theory_bias,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"MC MSE"</span>: np.mean((values <span class="op">-</span> sigma2)<span class="op">**</span><span class="dv">2</span>),</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"Theory MSE"</span>: theory_mse})</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>variance_results <span class="op">=</span> pd.DataFrame(rows)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>display(variance_results.<span class="bu">round</span>(<span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="tbl-variance-mse" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="4">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-variance-mse-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Monte Carlo bias and MSE for the two variance estimators. Compare the simulated values with the analytical predictions.
+</figcaption>
+<div aria-describedby="tbl-variance-mse-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe cell caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">n</th>
+<th data-quarto-table-cell-role="th">Estimator</th>
+<th data-quarto-table-cell-role="th">MC bias</th>
+<th data-quarto-table-cell-role="th">Theory bias</th>
+<th data-quarto-table-cell-role="th">MC MSE</th>
+<th data-quarto-table-cell-role="th">Theory MSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>5</td>
+<td>Divisor n</td>
+<td>-0.792</td>
+<td>-0.80</td>
+<td>5.843</td>
+<td>5.760</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>5</td>
+<td>Divisor n-1</td>
+<td>0.010</td>
+<td>0.00</td>
+<td>8.150</td>
+<td>8.000</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>20</td>
+<td>Divisor n</td>
+<td>-0.202</td>
+<td>-0.20</td>
+<td>1.578</td>
+<td>1.560</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>20</td>
+<td>Divisor n-1</td>
+<td>-0.003</td>
+<td>0.00</td>
+<td>1.703</td>
+<td>1.684</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>100</td>
+<td>Divisor n</td>
+<td>-0.042</td>
+<td>-0.04</td>
+<td>0.318</td>
+<td>0.318</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>100</td>
+<td>Divisor n-1</td>
+<td>-0.002</td>
+<td>0.00</td>
+<td>0.323</td>
+<td>0.323</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>Discrepancies between simulated and theoretical numbers are not necessarily errors. We use finitely many simulations, so the Monte Carlo estimates themselves fluctuate.</p>
+<p>In this simple example, it is actually possible to derive bias and variance of the estimators analytically by hand. Indeed, we can prove the key expectation by using the identity</p>
+<p><span class="math display">\[
+\sum_{i=1}^n(X_i-\overline X_n)^2
+=\sum_{i=1}^n(X_i-\mu)^2-n(\overline X_n-\mu)^2.
+\]</span></p>
+<p>Taking expectations gives <span class="math inline">\(n\sigma^2-n\cdot\sigma^2/n=(n-1)\sigma^2\)</span>. Consequently,</p>
+<p><span class="math display">\[
+\boxed{\mathbb E[\widetilde S_n^2]=\frac{n-1}{n}\sigma^2,
+\qquad \mathbb E[S_n^2]=\sigma^2.}
+\]</span></p>
+<p>Thus <span class="math inline">\(S_n^2\)</span> is unbiased and <span class="math inline">\(\widetilde S_n^2\)</span> has bias <span class="math inline">\(-\sigma^2/n\)</span>. The latter is, nevertheless, asymptotically unbiased.</p>
+<p><strong>A more surprising fact under normal sampling.</strong> If the observations are normal, we additionally have</p>
+<p><span class="math display">\[
+\begin{aligned}
+\operatorname{Var}(S_n^2)&amp;=\frac{2\sigma^4}{n-1},\\
+\operatorname{Var}(\widetilde S_n^2)&amp;=\frac{2(n-1)\sigma^4}{n^2},\\
+\operatorname{MSE}(S_n^2)&amp;=\frac{2\sigma^4}{n-1},\\
+\operatorname{MSE}(\widetilde S_n^2)&amp;=\frac{2n-1}{n^2}\sigma^4.
+\end{aligned}
+\]</span></p>
+<p>For <span class="math inline">\(n\geq2\)</span>, the <em>biased</em> version actually has a smaller MSE than the unbiased one. This is a finite-sample bias–variance trade-off, <strong>not</strong> an argument that one normalization is always preferable: the choice can depend on the purpose, interpretation, and assumptions.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Scope of the result">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Scope of the result
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The expectation identities hold for any i.i.d. sample with finite variance. The two displayed <strong>variance and MSE formulas</strong> use the additional assumption that the observations are normally distributed. We will not silently apply them to arbitrary distributions.</p>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="consistency-and-convergence-rates" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Consistency and convergence rates</h1>
+<section id="consistency-what-happens-with-more-data" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="consistency-what-happens-with-more-data"><span class="header-section-number">3.1</span> Consistency: what happens with more data?</h2>
+<p>In Chapter 1, we distinguished convergence in probability, almost sure convergence, and convergence in mean square. These are now properties of sequences of estimators.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Definition: consistency">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Definition: consistency
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>An estimator sequence <span class="math inline">\(\widehat\theta_n\)</span> is <strong>(weakly) consistent</strong> for <span class="math inline">\(\theta\)</span> if</p>
+<p><span class="math display">\[\widehat\theta_n\xrightarrow{P}\theta,\]</span></p>
+<p>or equivalently, if for every <span class="math inline">\(\varepsilon&gt;0\)</span>,</p>
+<p><span class="math display">\[\mathbb P(|\widehat\theta_n-\theta|&gt;\varepsilon)\longrightarrow0.\]</span></p>
+<p>It is <strong>strongly consistent</strong> if <span class="math inline">\(\widehat\theta_n\xrightarrow{a.s.}\theta\)</span> and <strong>mean-square consistent</strong> if <span class="math inline">\(\mathbb E[(\widehat\theta_n-\theta)^2]\to0\)</span>.</p>
+</div>
+</div>
+<p>Both strong consistency and mean-square consistency imply weak consistency. Neither of the first two notions automatically implies the other. Mean-square consistency can be checked by proving that the MSE tends to zero, since Markov’s inequality gives</p>
+<p><span class="math display">\[
+\mathbb P(|\widehat\theta_n-\theta|&gt;\varepsilon)
+\leq\frac{\operatorname{MSE}(\widehat\theta_n;\theta)}{\varepsilon^2}.
+\]</span></p>
+<p>If <span class="math inline">\(X_1,X_2,\ldots\)</span> are i.i.d. with <span class="math inline">\(\mathbb E[|X_1|]&lt;\infty\)</span>, the strong law of large numbers tells us</p>
+<p><span class="math display">\[\overline X_n\xrightarrow{a.s.}\mu.\]</span></p>
+<p>If they also have finite variance, then</p>
+<p><span class="math display">\[
+\operatorname{MSE}(\overline X_n;\mu)
+=\frac{\sigma^2}{n}\longrightarrow0,
+\]</span></p>
+<p>so <span class="math inline">\(\overline X_n\)</span> is mean-square consistent as well. Notice that unbiasedness and consistency answer different questions: bias concerns the estimator’s expectation at fixed <span class="math inline">\(n\)</span>; consistency concerns concentration around <span class="math inline">\(\theta\)</span> as <span class="math inline">\(n\)</span> grows.</p>
+<p><strong>Unbiased does not imply consistent.</strong> Imagine estimating <span class="math inline">\(\mu\)</span> by <span class="math inline">\(\widehat\mu_n=X_1\)</span> for all <span class="math inline">\(n\)</span>. This is unbiased, but its distribution and variance do not change with <span class="math inline">\(n\)</span>; in a non-degenerate population, it cannot be consistent. Conversely, <span class="math inline">\(\widetilde S_n^2\)</span> is biased for finite <span class="math inline">\(n\)</span> but is consistent for <span class="math inline">\(\sigma^2\)</span> when <span class="math inline">\(\mathbb E[X_1^2]&lt;\infty\)</span>.</p>
+<section id="experiment-3-normal-and-pareto-sample-mean-paths" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="experiment-3-normal-and-pareto-sample-mean-paths"><span class="header-section-number">3.1.1</span> Experiment 3: normal and Pareto sample-mean paths</h3>
+<p>For scale <span class="math inline">\(x_m&gt;0\)</span> and shape <span class="math inline">\(\alpha&gt;0\)</span>, its distribution function is</p>
+<p><span class="math display">\[
+F(x)=\begin{cases}
+0, &amp; x&lt;x_m,\\
+1-(x_m/x)^\alpha, &amp; x\geq x_m.
+\end{cases}
+\]</span></p>
+<p>If <span class="math inline">\(\alpha&gt;1\)</span>, <span class="math inline">\(\mathbb E[X]=\alpha x_m/(\alpha-1)\)</span> is finite. But if <span class="math inline">\(1&lt;\alpha\leq2\)</span>, <span class="math inline">\(\operatorname{Var}(X)=\infty\)</span>. In particular, for <span class="math inline">\(x_m=1\)</span> and <span class="math inline">\(\alpha=1.5\)</span>, <span class="math inline">\(\mu=3\)</span> but the variance is infinite.</p>
+<p>The strong law of large numbers still applies to the sample mean in this example, whereas <span class="math inline">\(\mathbb E[(\overline X_n-\mu)^2]\)</span> is infinite for every finite <span class="math inline">\(n\)</span>. Thus an estimator can be <strong>strongly consistent even though its MSE is infinite</strong>.</p>
+<p>Draw four independent <em>growing</em> samples from each distribution. Both populations have mean 3. The normal population has variance 1; the Pareto population has infinite variance.</p>
+<div id="cell-fig-pareto-paths" class="cell" data-fig-height="3.5" data-fig-width="9" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">1500</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> np.arange(<span class="dv">1</span>, N <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="fl">3.5</span>))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> [<span class="st">"Normal"</span>, <span class="st">"Pareto"</span>]</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>):</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>):</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>            x <span class="op">=</span> rng.normal(<span class="dv">3</span>, <span class="dv">1</span>, N)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>            x <span class="op">=</span> rng.pareto(<span class="fl">1.5</span>, N) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        running_mean <span class="op">=</span> np.cumsum(x) <span class="op">/</span> n</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        axes[i].plot(n, running_mean)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    axes[i].axhline(<span class="dv">3</span>, color<span class="op">=</span><span class="st">"black"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    axes[i].set_title(names[i])</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    axes[i].set_xlabel(<span class="st">"Sample size n"</span>)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    axes[i].set_xlim(<span class="dv">1</span>, N)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    axes[i].set_ylim(<span class="dv">1</span>, <span class="dv">5</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">"Running sample mean"</span>)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="fig-pareto-paths" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pareto-paths-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="CH2_files/figure-html/fig-pareto-paths-output-1.png" width="836" height="324" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pareto-paths-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Four trajectories of cumulative sample means from a normal population (left) and a Pareto population with finite mean but infinite variance (right). The dashed line marks the common population mean 3.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>A sample path plot demonstrates possible behavior, but four paths cannot <em>prove</em> an asymptotic property. Also, extreme Pareto draws can cause a sample mean to jump sharply even when <span class="math inline">\(n\)</span> is large. A standard <span class="math inline">\(\sqrt n\)</span> normal approximation is not justified here.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Exercise 3: consistency versus MSE">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Exercise 3: consistency versus MSE
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Explain why the Pareto sample mean above is strongly consistent even though its MSE does not converge to zero. Which assumption of the ordinary finite-variance central limit theorem is violated?</p>
+</div>
+</div>
+<!--
+
+# 4 Asymptotic sampling distributions and intervals
+
+## 4.1 The central limit theorem as an estimation tool
+
+For i.i.d. observations with $\mathbb E[X_1]=\mu$ and $0<\operatorname{Var}(X_1)=\sigma^2<\infty$, the central limit theorem states
+
+$$
+\frac{\sqrt n(\overline X_n-\mu)}{\sigma}
+\xrightarrow{d}N(0,1).
+$$
+
+It follows that, for sufficiently large $n$, the sampling distribution of $\overline X_n$ is approximately normal with mean $\mu$ and variance $\sigma^2/n$. For normal observations this is an exact result; for other finite-variance populations it is generally an approximation, and its accuracy depends on $n$ and the population's shape.
+
+Many other estimators have limiting sampling distributions of the form
+
+$$
+\sqrt n(\widehat\theta_n-\theta)\xrightarrow{d}N(0,v^2),
+$$
+
+where $v^2$ is called the **asymptotic variance** of the scaled estimator. Such a result needs to be established for the particular estimator; it does not hold automatically for every statistic.
+
+### Experiment 4: a normal approximation under skewness
+
+An exponential random variable with rate 1 has mean 1, variance 1, and a right-skewed distribution. We compare the sampling distributions of the **standardized** sample mean for normal and exponential observations with the standard normal density.
+
+::: {#cell-fig-clt-estimators .cell fig-height='5.2' fig-width='9' execution_count=6}
+``` {.python .cell-code}
+B = 8_000
+ns = [5, 30, 100]
+fig, axes = plt.subplots(2, 3, figsize=(9, 5.2), sharex=True, sharey=True)
+for col, n in enumerate(ns):
+    for row, distribution in enumerate(["Normal", "Exponential"]):
+        if distribution == "Normal":
+            x = rng.normal(1, 1, size=(B, n))
+        else:
+            x = rng.exponential(scale=1, size=(B, n))
+        z = np.sqrt(n) * (x.mean(axis=1) - 1)
+        ax = axes[row, col]
+        ax.hist(z, bins=50, density=True, alpha=0.6)
+        grid = np.linspace(-4, 4, 400)
+        ax.plot(grid, stats.norm.pdf(grid), color="black", lw=1.5)
+        ax.set_title(f"{distribution}, n = {n}")
+        ax.set_xlim(-4, 4)
+        if col == 0:
+            ax.set_ylabel("Density")
+        if row == 1:
+            ax.set_xlabel("Standardized sample mean")
+fig.tight_layout()
+plt.show()
+```
+
+::: {.cell-output .cell-output-display}
+![Sampling distribution of the standardized sample mean for normal and exponential observations. Under normal sampling the reference curve is exact; under exponential sampling it is an asymptotic approximation.](CH2_files/figure-html/fig-clt-estimators-output-1.png){#fig-clt-estimators width=853 height=488}
+:::
+:::
+
+
+The plot illustrates convergence in distribution, **not** convergence of $\sqrt n(\overline X_n-\mu)$ to zero. The latter has a non-degenerate limiting distribution. The *unscaled* error $\overline X_n-\mu$ does converge to zero under the LLN.
+
+## 4.2 Estimated standard errors and Slutsky's theorem
+
+Usually $\sigma$ is unknown. If $S_n\xrightarrow{P}\sigma>0$, Slutsky's theorem allows us to replace the population standard deviation by a consistent estimate:
+
+$$
+\frac{\sqrt n(\overline X_n-\mu)}{S_n}
+\xrightarrow{d}N(0,1).
+$$
+
+One application is the familiar **approximate** two-sided confidence interval,
+
+$$
+\left[
+\overline X_n-z_{1-\alpha/2}\frac{S_n}{\sqrt n},\quad
+\overline X_n+z_{1-\alpha/2}\frac{S_n}{\sqrt n}
+\right],
+$$
+
+where $z_{1-\alpha/2}$ is the corresponding standard normal quantile. This interval has asymptotic coverage $1-\alpha$ under the stated assumptions. With normal observations and **known** $\sigma$, replacing $S_n$ by $\sigma$ instead produces an exact normal-theory interval. We will not develop hypothesis tests here; the point is to investigate the sampling behavior of an estimator and an interval procedure.
+
+## 4.3 Example: a machine producing components
+
+The original notes considered a machine intended to produce parts of length **18.3 mm**. Manufacturing fluctuations are approximately normal with known standard deviation $\sigma=0.18$ mm, but the actual mean $\mu$ may drift. We observe $n$ independently measured parts and estimate $\mu$ using $\overline X_n$.
+
+Because $\overline X_n\sim N(\mu,0.18^2/n)$, we have:
+
+| Number of parts $n$ | Standard error $0.18/\sqrt n$ (mm) | $\operatorname{MSE}(\overline X_n)$ (mm$^2$) |
+|---:|---:|---:|
+| 9 | 0.060 | 0.003600 |
+| 144 | 0.015 | 0.000225 |
+
+A sample of 144 parts rather than 9 reduces the standard error by a factor of four. With known $\sigma$, the exact $(1-\alpha)$ confidence interval is
+
+$$
+\left[\overline X_n-z_{1-\alpha/2}\frac{0.18}{\sqrt n},
+\ \overline X_n+z_{1-\alpha/2}\frac{0.18}{\sqrt n}\right].
+$$
+
+The interval is random because $\overline X_n$ is random. **Coverage** refers to the proportion of intervals containing the fixed true $\mu$ over repeated sampling—not to a probability distribution assigned to $\mu$ after observing a single sample.
+
+::: {.callout-tip title="Exercise 4: confidence interval width"}
+For $\alpha=0.05$, calculate the total width of the confidence interval with known $\sigma=0.18$ for $n=9$ and $n=144$. Explain why the widths are deterministic in this example, even though the interval endpoints are random.
+:::
+
+# 5 Monte Carlo experiments: theory with a computer
+
+## 5.1 The basic design
+
+A **Monte Carlo experiment** approximates a theoretical quantity by repeated simulation under a stated data-generating mechanism. For estimator evaluation, one repetition consists of a *complete sample* of size $n$, followed by calculating the estimate.
+
+1. **Specify the population:** distribution $F$, its parameters, and the target $\theta(F)$.
+2. **Specify the estimator:** a function $g_n$ applied to each random sample.
+3. **Choose the design:** sample sizes $n$, number of replications $B$, and a reproducible random seed.
+4. **Repeat $B$ times:** generate fresh i.i.d. data of size $n$ and record $\widehat\theta_n^{(b)}$ for each $b=1,\ldots,B$.
+5. **Summarize:** compare the empirical sampling distribution, bias, variance, MSE, RMSE, or interval coverage with the theory.
+6. **Check numerical uncertainty:** Monte Carlo estimates have their own standard errors and must not be treated as exact numbers.
+
+## 5.2 Approximating bias, variance, and MSE
+
+Let $\widehat\theta^{(1)},\ldots,\widehat\theta^{(B)}$ be independent simulated estimates, and write $\overline{\widehat\theta}_B=B^{-1}\sum_{b=1}^B\widehat\theta^{(b)}$. Define
+
+$$
+\begin{aligned}
+\widehat{\operatorname{Bias}}_{MC}
+&=\overline{\widehat\theta}_B-\theta,\\
+\widehat{\operatorname{Var}}_{MC}
+&=\frac1B\sum_{b=1}^B
+  \left(\widehat\theta^{(b)}-\overline{\widehat\theta}_B\right)^2,\\
+\widehat{\operatorname{MSE}}_{MC}
+&=\frac1B\sum_{b=1}^B(\widehat\theta^{(b)}-\theta)^2,\\
+\widehat{\operatorname{RMSE}}_{MC}
+&=\sqrt{\widehat{\operatorname{MSE}}_{MC}}.
+\end{aligned}
+$$
+
+Using $1/B$ for the Monte Carlo variance gives the **exact finite-$B$ identity**
+
+$$
+\widehat{\operatorname{MSE}}_{MC}
+=\widehat{\operatorname{Var}}_{MC}
++\widehat{\operatorname{Bias}}_{MC}^{\,2}.
+$$
+
+For an unbiased estimate of the *variance across replications*, software usually uses $1/(B-1)$ instead. That convention is also valid, but the displayed decomposition is then no longer an exact identity at finite $B$.
+
+::: {#mc-estimator-function .cell execution_count=7}
+``` {.python .cell-code}
+def mc_summary(estimates, truth):
+    """Summarize independent simulated estimates of one parameter."""
+    estimates = np.asarray(estimates, dtype=float)
+    error = estimates - truth
+    return {
+        "bias": error.mean(),
+        "variance": estimates.var(ddof=0),
+        "mse": np.mean(error**2),
+        "rmse": np.sqrt(np.mean(error**2)),
+        "mcse_of_mean": estimates.std(ddof=1) / np.sqrt(len(estimates))
+    }
+```
+:::
+
+
+::: {.callout-note title="Monte Carlo standard error (MCSE)"}
+The **standard error of the estimator** describes variation across actual data samples of size $n$. The **Monte Carlo standard error** describes how accurately a computer experiment with $B$ simulated samples approximates a summary of that sampling distribution.
+
+For a simulated mean of estimates, a suitable MCSE estimate is
+
+$$
+\widehat{\operatorname{MCSE}}\left(\overline{\widehat\theta}_B\right)
+=\frac{s_{MC}}{\sqrt B},
+\quad
+s_{MC}^2=\frac1{B-1}\sum_{b=1}^B
+  \left(\widehat\theta^{(b)}-\overline{\widehat\theta}_B\right)^2.
+$$
+
+This formula requires a finite variance across independent replications. It also applies to the simulated bias because subtracting the known constant $\theta$ does not change its MCSE.
+:::
+
+### Experiment 5: Monte Carlo error versus sample size
+
+Suppose $X_i\sim N(2,1)$ and we estimate $\mu=2$ with $\overline X_n$. Its bias is exactly zero and its standard error is $1/\sqrt n$. Estimate its bias using different values of $B$ while keeping $n=20$ fixed.
+
+::: {#tbl-monte-carlo-uncertainty .cell tbl-cap='Estimated bias and its Monte Carlo standard error. The true bias is zero; more replications make the simulation estimate less noisy.' execution_count=8}
+``` {.python .cell-code}
+n = 20
+rows = []
+for B in [200, 1_000, 10_000]:
+    estimates = rng.normal(loc=2, scale=1, size=(B, n)).mean(axis=1)
+    result = mc_summary(estimates, truth=2)
+    rows.append({"n": n, "B": B, "MC bias": result["bias"],
+                 "MCSE of bias": result["mcse_of_mean"],
+                 "Empirical SE of estimator": np.std(estimates, ddof=1),
+                 "Theoretical SE": 1 / np.sqrt(n)})
+display(pd.DataFrame(rows).round(4))
+```
+
+::: {.cell-output .cell-output-display}
+```{=html}
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">n</th>
+<th data-quarto-table-cell-role="th">B</th>
+<th data-quarto-table-cell-role="th">MC bias</th>
+<th data-quarto-table-cell-role="th">MCSE of bias</th>
+<th data-quarto-table-cell-role="th">Empirical SE of estimator</th>
+<th data-quarto-table-cell-role="th">Theoretical SE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>20</td>
+<td>200</td>
+<td>-0.0090</td>
+<td>0.0156</td>
+<td>0.2201</td>
+<td>0.2236</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>20</td>
+<td>1000</td>
+<td>0.0076</td>
+<td>0.0072</td>
+<td>0.2292</td>
+<td>0.2236</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>20</td>
+<td>10000</td>
+<td>-0.0028</td>
+<td>0.0023</td>
+<td>0.2257</td>
+<td>0.2236</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+```
+:::
+:::
+
+
+If we repeat this *whole experiment*, the displayed Monte Carlo estimates will change. Moreover, increasing $B$ does not reduce the actual standard error of $\overline X_n$; that requires increasing $n$.
+
+## 5.3 Estimating interval coverage
+
+We can also evaluate uncertainty procedures through simulation. If $I^{(b)}$ is the interval computed from the $b$-th sample, define the coverage indicator
+
+$$C_b=\boldsymbol{1}\{\theta\in I^{(b)}\}.$$
+
+The simulated **coverage** is $\widehat c=B^{-1}\sum_b C_b$. As the indicators are Bernoulli variables from independent replications, their estimated Monte Carlo standard error is
+
+$$
+\widehat{\operatorname{MCSE}}(\widehat c)
+\approx\sqrt{\frac{\widehat c(1-\widehat c)}{B}}.
+$$
+
+This uncertainty concerns the *estimated coverage*. It is not the confidence interval's width or the standard error of the original sample mean.
+
+### Experiment 6: coverage under exact normality and skewness
+
+We construct nominal 95% *normal-based* intervals for means from (a) a normal population and (b) an exponential population. Both populations have mean $1$ and standard deviation $1$. For each population we contrast an interval using the **known** standard deviation with the more practical version **plugging in $S_n$**, keeping the *normal* critical value in both cases. The known-standard-deviation interval has exact 95% coverage under normal sampling. The plug-in version is only asymptotically justified, even under normal sampling, and can behave poorly at small $n$.
+
+::: {#tbl-coverage .cell tbl-cap='Simulated coverage of 95% normal-based intervals with known versus estimated standard deviation. Even normal data do not make the plug-in z-interval exact at small n.' execution_count=9}
+``` {.python .cell-code}
+B = 12_000
+z = stats.norm.ppf(0.975)
+rows = []
+for distribution in ["Normal", "Exponential"]:
+    for n in [5, 20, 100]:
+        if distribution == "Normal":
+            samples = rng.normal(1, 1, size=(B, n))
+        else:
+            samples = rng.exponential(scale=1, size=(B, n))
+        means = samples.mean(axis=1)
+        for sd_method, scale in [("Known SD", np.ones(B)),
+                                 ("Estimated SD", samples.std(axis=1, ddof=1))]:
+            half_width = z * scale / np.sqrt(n)
+            covered = (means - half_width <= 1) & (1 <= means + half_width)
+            c_hat = covered.mean()
+            rows.append({"Population": distribution, "n": n,
+                         "SD used": sd_method, "Coverage": c_hat,
+                         "MCSE": np.sqrt(c_hat * (1 - c_hat) / B)})
+coverage_results = pd.DataFrame(rows)
+display(coverage_results.round(4))
+```
+
+::: {.cell-output .cell-output-display}
+```{=html}
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Population</th>
+<th data-quarto-table-cell-role="th">n</th>
+<th data-quarto-table-cell-role="th">SD used</th>
+<th data-quarto-table-cell-role="th">Coverage</th>
+<th data-quarto-table-cell-role="th">MCSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Normal</td>
+<td>5</td>
+<td>Known SD</td>
+<td>0.9498</td>
+<td>0.0020</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Normal</td>
+<td>5</td>
+<td>Estimated SD</td>
+<td>0.8786</td>
+<td>0.0030</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Normal</td>
+<td>20</td>
+<td>Known SD</td>
+<td>0.9488</td>
+<td>0.0020</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Normal</td>
+<td>20</td>
+<td>Estimated SD</td>
+<td>0.9358</td>
+<td>0.0022</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Normal</td>
+<td>100</td>
+<td>Known SD</td>
+<td>0.9511</td>
+<td>0.0020</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>Normal</td>
+<td>100</td>
+<td>Estimated SD</td>
+<td>0.9480</td>
+<td>0.0020</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>Exponential</td>
+<td>5</td>
+<td>Known SD</td>
+<td>0.9579</td>
+<td>0.0018</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>Exponential</td>
+<td>5</td>
+<td>Estimated SD</td>
+<td>0.8143</td>
+<td>0.0035</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>Exponential</td>
+<td>20</td>
+<td>Known SD</td>
+<td>0.9533</td>
+<td>0.0019</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>Exponential</td>
+<td>20</td>
+<td>Estimated SD</td>
+<td>0.9034</td>
+<td>0.0027</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>Exponential</td>
+<td>100</td>
+<td>Known SD</td>
+<td>0.9507</td>
+<td>0.0020</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">11</td>
+<td>Exponential</td>
+<td>100</td>
+<td>Estimated SD</td>
+<td>0.9377</td>
+<td>0.0022</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+```
+:::
+:::
+
+
+A useful diagnostic is to ask whether the difference from $0.95$ is large relative to its MCSE. The difference between the two interval constructions is especially clear for $n=5$: estimating the standard deviation introduces an additional source of finite-sample approximation error. Under normal sampling, using a suitable $t$ rather than normal quantile would give an exact interval, but that refinement is not our focus here. If a coverage discrepancy is much larger than its MCSE, simply increasing Monte Carlo replications will not fix the underlying approximation error. Increasing *sample size $n$* may help, provided the LLN and CLT assumptions apply.
+
+::: {.callout-warning title="Do not confuse two sources of error"}
+A finite-sample approximation can be systematically inaccurate even if it has been simulated a million times. More Monte Carlo replications reduce *numerical simulation uncertainty*; they do not make an invalid statistical approximation valid.
+:::
+
+# 6 Coding lab (45 minutes): finite samples and repeated sampling
+
+Work through the questions in order. Use a fixed random seed, explain the statistical meaning of each quantity you calculate, and compare the output to the theoretical prediction. You can reuse `mc_summary` from Section 5.
+
+## Task A (10 minutes): build an estimator experiment
+
+1. Generate $B=5{,}000$ samples of size $n=10$ from $N(4,3^2)$ and calculate the sample mean of each sample.
+2. Estimate the bias, variance, MSE, and RMSE of the sample mean. Compare with $0$, $9/n$, $9/n$, and $3/\sqrt n$, respectively.
+3. Change $n$ to $40$ while holding $B$ fixed. Which quantities should become approximately one quarter as large, and which one half as large?
+
+::: {#lab-starter .cell execution_count=10}
+``` {.python .cell-code}
+rng_lab = np.random.default_rng(123)
+B, n, mu, sigma = 5_000, 10, 4.0, 3.0
+samples = rng_lab.normal(mu, sigma, size=(B, n))
+estimates = samples.mean(axis=1)
+print(mc_summary(estimates, truth=mu))
+# TODO: compare with the theoretical quantities, then repeat with n = 40.
+```
+:::
+
+
+## Task B (15 minutes): a biased estimator can have smaller MSE
+
+1. Generate $B=10{,}000$ samples from $N(0,1)$ of size $n=8$.
+2. Calculate both $\widetilde S_n^2$ and $S_n^2$ for every sample, using `np.var(..., axis=1, ddof=0)` and `ddof=1`.
+3. Approximate bias, variance, and MSE for both estimators. Check the identity $\widehat{\operatorname{MSE}}_{MC}=\widehat{\operatorname{Var}}_{MC}+\widehat{\operatorname{Bias}}_{MC}^2$.
+4. Explain why the estimator with smaller absolute bias need not have smaller MSE.
+
+## Task C (20 minutes): investigate confidence-interval coverage
+
+1. Repeat Experiment 6 with $n\in\{5,20,100\}$ and $B=10{,}000$ for exponentially distributed observations.
+2. Compare the coverage probabilities and their estimated MCSEs with the nominal level $0.95$.
+3. Compare using the *known* standard deviation with substituting the sample standard deviation $S_n$. Discuss the resulting changes. Remember that a normal critical value with an estimated standard error generally gives an **asymptotic**, not necessarily exact, interval.
+4. Explain why changing $B$ alone does not repair poor small-sample coverage.
+
+::: {.callout-tip title="Further exercises"}
+**Exercise 5 — Rates.** Starting from $\operatorname{Var}(\overline X_n)=\sigma^2/n$, use Chebyshev's inequality to show $\overline X_n-\mu=O_P(n^{-1/2})$. Why does this argument not apply to the Pareto example with shape $1.5$?
+
+**Exercise 6 — Design a simulation study.** You wish to compare the bias of an estimator for $n=10,30,100$. Explain why it makes sense to use the same number of replications $B$ for all three scenarios, and describe how you would report Monte Carlo uncertainty.
+
+**Exercise 7 — Challenge.** For Pareto observations with $x_m=1$ and $\alpha=1.5$, compare the median absolute error of $\overline X_n$ for $n=20,100,500$ using independent Monte Carlo repetitions. Why might the median absolute error be more informative here than the MSE?
+:::
+
+# 7 Summary
+
+The central ideas of the chapter can be condensed as follows:
+
+| Concept | Question it answers | Key expression |
+|:--|:--|:--|
+| Sampling distribution | How does the estimate change across fresh samples? | $\mathcal L(\widehat\theta_n)$ |
+| Bias | Is the estimator systematically off target? | $\mathbb E[\widehat\theta_n]-\theta$ |
+| Standard error | How much does it fluctuate across samples? | $\sqrt{\operatorname{Var}(\widehat\theta_n)}$ |
+| MSE | How large is the expected squared estimation error? | $\operatorname{Var}(\widehat\theta_n)+\operatorname{Bias}^2$ |
+| Consistency | Does the estimate concentrate at the target as $n$ increases? | $\widehat\theta_n\xrightarrow{P}\theta$ |
+| Convergence rate | How quickly does the stochastic error shrink? | $\overline X_n-\mu=O_P(n^{-1/2})$ (finite variance) |
+| Monte Carlo approximation | What can repeated synthetic samples tell us? | $B^{-1}\sum_{b=1}^B h(\widehat\theta^{(b)})$ |
+
+::: {.callout-important title="Central message"}
+**Statistical uncertainty** describes variation in an estimator because we observe only a finite sample. **Monte Carlo uncertainty** describes variation in numerical summaries because we simulate only a finite number of repetitions. We need theory and computation to understand both, and we must keep them separate.
+:::
+
+In the next chapter we move from single-parameter estimators to **linear regression**. Least-squares coefficients are also estimators with sampling distributions, bias, variance, and asymptotic properties. The ideas developed here therefore remain central throughout the course.
+
+-->
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
