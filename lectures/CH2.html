@@ -314,6 +314,25 @@ window.Quarto = {
   <li><a href="#experiment-3-normal-and-pareto-sample-mean-paths" id="toc-experiment-3-normal-and-pareto-sample-mean-paths" class="nav-link" data-scroll-target="#experiment-3-normal-and-pareto-sample-mean-paths"><span class="header-section-number">3.1.1</span> Experiment 3: normal and Pareto sample-mean paths</a></li>
   </ul></li>
   </ul></li>
+  <li><a href="#asymptotic-sampling-distributions-and-intervals" id="toc-asymptotic-sampling-distributions-and-intervals" class="nav-link" data-scroll-target="#asymptotic-sampling-distributions-and-intervals"><span class="header-section-number">4</span> Asymptotic sampling distributions and intervals</a>
+  <ul class="collapse">
+  <li><a href="#the-central-limit-theorem-as-an-estimation-tool" id="toc-the-central-limit-theorem-as-an-estimation-tool" class="nav-link" data-scroll-target="#the-central-limit-theorem-as-an-estimation-tool"><span class="header-section-number">4.1</span> The central limit theorem as an estimation tool</a></li>
+  <li><a href="#estimated-standard-errors-and-slutskys-theorem" id="toc-estimated-standard-errors-and-slutskys-theorem" class="nav-link" data-scroll-target="#estimated-standard-errors-and-slutskys-theorem"><span class="header-section-number">4.2</span> 4.2 Estimated standard errors and Slutsky’s theorem</a></li>
+  <li><a href="#example-a-machine-producing-components" id="toc-example-a-machine-producing-components" class="nav-link" data-scroll-target="#example-a-machine-producing-components"><span class="header-section-number">4.3</span> 4.3 Example: a machine producing components</a></li>
+  </ul></li>
+  <li><a href="#monte-carlo-experiments-theory-with-a-computer" id="toc-monte-carlo-experiments-theory-with-a-computer" class="nav-link" data-scroll-target="#monte-carlo-experiments-theory-with-a-computer"><span class="header-section-number">5</span> Monte Carlo experiments: theory with a computer</a>
+  <ul class="collapse">
+  <li><a href="#the-basic-design" id="toc-the-basic-design" class="nav-link" data-scroll-target="#the-basic-design"><span class="header-section-number">5.1</span> The basic design</a></li>
+  <li><a href="#approximating-bias-variance-and-mse" id="toc-approximating-bias-variance-and-mse" class="nav-link" data-scroll-target="#approximating-bias-variance-and-mse"><span class="header-section-number">5.2</span> 5.2 Approximating bias, variance, and MSE</a>
+  <ul class="collapse">
+  <li><a href="#experiment-5-monte-carlo-error-versus-sample-size" id="toc-experiment-5-monte-carlo-error-versus-sample-size" class="nav-link" data-scroll-target="#experiment-5-monte-carlo-error-versus-sample-size"><span class="header-section-number">5.2.1</span> Experiment 5: Monte Carlo error versus sample size</a></li>
+  </ul></li>
+  <li><a href="#estimating-interval-coverage" id="toc-estimating-interval-coverage" class="nav-link" data-scroll-target="#estimating-interval-coverage"><span class="header-section-number">5.3</span> Estimating interval coverage</a>
+  <ul class="collapse">
+  <li><a href="#experiment-6-coverage-under-exact-normality-and-skewness" id="toc-experiment-6-coverage-under-exact-normality-and-skewness" class="nav-link" data-scroll-target="#experiment-6-coverage-under-exact-normality-and-skewness"><span class="header-section-number">5.3.1</span> Experiment 6: coverage under exact normality and skewness</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#coding-lab" id="toc-coding-lab" class="nav-link" data-scroll-target="#coding-lab"><span class="header-section-number">6</span> Coding Lab</a></li>
   </ul>
 </nav>
     </div>
@@ -348,7 +367,6 @@ window.Quarto = {
 <li>calculate and interpret <strong>bias</strong>, <strong>variance</strong>, <strong>mean squared error (MSE)</strong>, and <strong>root mean squared error (RMSE)</strong>;</li>
 <li>explain why an unbiased estimator need not have the smallest MSE;</li>
 <li>establish <strong>consistency</strong> for basic estimators and describe the role of moment assumptions;</li>
-<li>interpret the <span class="math inline">\(n^{-1/2}\)</span> rate and asymptotic normality of the sample mean;</li>
 <li>design reproducible <strong>Monte Carlo experiments</strong>, distinguish sample size <span class="math inline">\(n\)</span> from the number of repetitions <span class="math inline">\(B\)</span>, and quantify Monte Carlo uncertainty;</li>
 <li>investigate the finite-sample behavior of estimators and confidence intervals using Python.</li>
 </ul>
@@ -365,8 +383,11 @@ window.Quarto = {
 <p>Chapter 1 introduced the law of large numbers (LLN), the central limit theorem (CLT), and modes of convergence. Here we apply these tools to <strong>statistics computed from data</strong>. Before executing a simulation, write down what the theory predicts. After running it, distinguish what is a mathematical statement from what is only an approximation produced by finitely many simulated samples. As elsewhere in the course, understanding the statistics matters more than memorizing the Python syntax.</p>
 </div>
 </div>
-<p><strong>Reading:</strong> Wasserman (2004), <em>All of Statistics</em>, selected material from Chapters 6 and 9 (statistical inference and estimation). See the <a href="https://egrcc.github.io/docs/math/all-of-statistics.pdf">online book</a>. The theoretical exposition also adapts and translates Sections 2.1–2.5 of Dennis Schroers’s German lecture notes <em>Nichtparametrische Statistik</em> (University of Bonn, 2023). The Monte Carlo experiments are new and developed for this course.</p>
-<p><strong>This week’s plan:</strong> Monday (26 October): estimators, sampling distributions, bias, variance, MSE, and consistency. Wednesday (28 October): asymptotic approximations, Monte Carlo design, and the coding lab.</p>
+<p><strong>Reading:</strong> Wasserman (2004), <em>All of Statistics</em>, selected material from Chapters 6 and 9 (statistical inference and estimation). See the <a href="https://egrcc.github.io/docs/math/all-of-statistics.pdf">online book</a>.</p>
+<p><strong>This week’s plan:</strong> Monday (2 November): estimators, sampling distributions, bias, variance, MSE, and consistency. Wednesday (4 November): asymptotic approximations, Monte Carlo design, and the coding lab.</p>
+<p><a href="../slides/Slide_CH2.html">View slides in full screen</a></p>
+<iframe class="slide-deck" src="../slides/Slide_CH2.html" width="100%" height="500" allowfullscreen="">
+</iframe>
 </section>
 <section id="from-a-random-sample-to-an-estimator" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> From a random sample to an estimator</h1>
@@ -858,223 +879,191 @@ Figure&nbsp;3: Four trajectories of cumulative sample means from a normal popula
 <p>Explain why the Pareto sample mean above is strongly consistent even though its MSE does not converge to zero. Which assumption of the ordinary finite-variance central limit theorem is violated?</p>
 </div>
 </div>
-<!--
-
-# 4 Asymptotic sampling distributions and intervals
-
-## 4.1 The central limit theorem as an estimation tool
-
-For i.i.d. observations with $\mathbb E[X_1]=\mu$ and $0<\operatorname{Var}(X_1)=\sigma^2<\infty$, the central limit theorem states
-
-$$
+</section>
+</section>
+</section>
+<section id="asymptotic-sampling-distributions-and-intervals" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Asymptotic sampling distributions and intervals</h1>
+<section id="the-central-limit-theorem-as-an-estimation-tool" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="the-central-limit-theorem-as-an-estimation-tool"><span class="header-section-number">4.1</span> The central limit theorem as an estimation tool</h2>
+<p>For i.i.d. observations with <span class="math inline">\(\mathbb E[X_1]=\mu\)</span> and <span class="math inline">\(0&lt;\operatorname{Var}(X_1)=\sigma^2&lt;\infty\)</span>, the central limit theorem states</p>
+<p><span class="math display">\[
 \frac{\sqrt n(\overline X_n-\mu)}{\sigma}
 \xrightarrow{d}N(0,1).
-$$
-
-It follows that, for sufficiently large $n$, the sampling distribution of $\overline X_n$ is approximately normal with mean $\mu$ and variance $\sigma^2/n$. For normal observations this is an exact result; for other finite-variance populations it is generally an approximation, and its accuracy depends on $n$ and the population's shape.
-
-Many other estimators have limiting sampling distributions of the form
-
-$$
+\]</span></p>
+<p>It follows that, for sufficiently large <span class="math inline">\(n\)</span>, the sampling distribution of <span class="math inline">\(\overline X_n\)</span> is approximately normal with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2/n\)</span>. For normal observations this is an exact result; for other finite-variance populations it is generally an approximation, and its accuracy depends on <span class="math inline">\(n\)</span> and the population’s shape.</p>
+<p>Many other estimators have limiting sampling distributions of the form</p>
+<p><span class="math display">\[
 \sqrt n(\widehat\theta_n-\theta)\xrightarrow{d}N(0,v^2),
-$$
-
-where $v^2$ is called the **asymptotic variance** of the scaled estimator. Such a result needs to be established for the particular estimator; it does not hold automatically for every statistic.
-
-### Experiment 4: a normal approximation under skewness
-
-An exponential random variable with rate 1 has mean 1, variance 1, and a right-skewed distribution. We compare the sampling distributions of the **standardized** sample mean for normal and exponential observations with the standard normal density.
-
-::: {#cell-fig-clt-estimators .cell fig-height='5.2' fig-width='9' execution_count=6}
-``` {.python .cell-code}
-B = 8_000
-ns = [5, 30, 100]
-fig, axes = plt.subplots(2, 3, figsize=(9, 5.2), sharex=True, sharey=True)
-for col, n in enumerate(ns):
-    for row, distribution in enumerate(["Normal", "Exponential"]):
-        if distribution == "Normal":
-            x = rng.normal(1, 1, size=(B, n))
-        else:
-            x = rng.exponential(scale=1, size=(B, n))
-        z = np.sqrt(n) * (x.mean(axis=1) - 1)
-        ax = axes[row, col]
-        ax.hist(z, bins=50, density=True, alpha=0.6)
-        grid = np.linspace(-4, 4, 400)
-        ax.plot(grid, stats.norm.pdf(grid), color="black", lw=1.5)
-        ax.set_title(f"{distribution}, n = {n}")
-        ax.set_xlim(-4, 4)
-        if col == 0:
-            ax.set_ylabel("Density")
-        if row == 1:
-            ax.set_xlabel("Standardized sample mean")
-fig.tight_layout()
-plt.show()
-```
-
-::: {.cell-output .cell-output-display}
-![Sampling distribution of the standardized sample mean for normal and exponential observations. Under normal sampling the reference curve is exact; under exponential sampling it is an asymptotic approximation.](CH2_files/figure-html/fig-clt-estimators-output-1.png){#fig-clt-estimators width=853 height=488}
-:::
-:::
-
-
-The plot illustrates convergence in distribution, **not** convergence of $\sqrt n(\overline X_n-\mu)$ to zero. The latter has a non-degenerate limiting distribution. The *unscaled* error $\overline X_n-\mu$ does converge to zero under the LLN.
-
-## 4.2 Estimated standard errors and Slutsky's theorem
-
-Usually $\sigma$ is unknown. If $S_n\xrightarrow{P}\sigma>0$, Slutsky's theorem allows us to replace the population standard deviation by a consistent estimate:
-
-$$
+\]</span></p>
+<p>where <span class="math inline">\(v^2\)</span> is called the <strong>asymptotic variance</strong> of the scaled estimator. Such a result needs to be established for the particular estimator; it does not hold automatically for every statistic.</p>
+</section>
+<section id="estimated-standard-errors-and-slutskys-theorem" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="estimated-standard-errors-and-slutskys-theorem"><span class="header-section-number">4.2</span> 4.2 Estimated standard errors and Slutsky’s theorem</h2>
+<p>Usually <span class="math inline">\(\sigma\)</span> is unknown. If <span class="math inline">\(S_n\xrightarrow{P}\sigma&gt;0\)</span>, Slutsky’s theorem allows us to replace the population standard deviation by a consistent estimate:</p>
+<p><span class="math display">\[
 \frac{\sqrt n(\overline X_n-\mu)}{S_n}
 \xrightarrow{d}N(0,1).
-$$
-
-One application is the familiar **approximate** two-sided confidence interval,
-
-$$
+\]</span></p>
+<p>One application is the familiar <strong>approximate</strong> two-sided confidence interval,</p>
+<p><span class="math display">\[
 \left[
 \overline X_n-z_{1-\alpha/2}\frac{S_n}{\sqrt n},\quad
 \overline X_n+z_{1-\alpha/2}\frac{S_n}{\sqrt n}
 \right],
-$$
-
-where $z_{1-\alpha/2}$ is the corresponding standard normal quantile. This interval has asymptotic coverage $1-\alpha$ under the stated assumptions. With normal observations and **known** $\sigma$, replacing $S_n$ by $\sigma$ instead produces an exact normal-theory interval. We will not develop hypothesis tests here; the point is to investigate the sampling behavior of an estimator and an interval procedure.
-
-## 4.3 Example: a machine producing components
-
-The original notes considered a machine intended to produce parts of length **18.3 mm**. Manufacturing fluctuations are approximately normal with known standard deviation $\sigma=0.18$ mm, but the actual mean $\mu$ may drift. We observe $n$ independently measured parts and estimate $\mu$ using $\overline X_n$.
-
-Because $\overline X_n\sim N(\mu,0.18^2/n)$, we have:
-
-| Number of parts $n$ | Standard error $0.18/\sqrt n$ (mm) | $\operatorname{MSE}(\overline X_n)$ (mm$^2$) |
-|---:|---:|---:|
-| 9 | 0.060 | 0.003600 |
-| 144 | 0.015 | 0.000225 |
-
-A sample of 144 parts rather than 9 reduces the standard error by a factor of four. With known $\sigma$, the exact $(1-\alpha)$ confidence interval is
-
-$$
+\]</span></p>
+<p>where <span class="math inline">\(z_{1-\alpha/2}\)</span> is the corresponding standard normal quantile. This interval has asymptotic coverage <span class="math inline">\(1-\alpha\)</span> under the stated assumptions. With normal observations and <strong>known</strong> <span class="math inline">\(\sigma\)</span>, replacing <span class="math inline">\(S_n\)</span> by <span class="math inline">\(\sigma\)</span> instead produces an exact normal-theory interval. We will not develop hypothesis tests here; the point is to investigate the sampling behavior of an estimator and an interval procedure.</p>
+</section>
+<section id="example-a-machine-producing-components" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="example-a-machine-producing-components"><span class="header-section-number">4.3</span> 4.3 Example: a machine producing components</h2>
+<p>Manufacturing fluctuations are approximately normal with known standard deviation <span class="math inline">\(\sigma=0.18\)</span> mm, but the actual mean <span class="math inline">\(\mu\)</span> may drift. We observe <span class="math inline">\(n\)</span> independently measured parts and estimate <span class="math inline">\(\mu\)</span> using <span class="math inline">\(\overline X_n\)</span>.</p>
+<p>Because <span class="math inline">\(\overline X_n\sim N(\mu,0.18^2/n)\)</span>, we have:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Number of parts <span class="math inline">\(n\)</span></th>
+<th style="text-align: right;">Standard error <span class="math inline">\(0.18/\sqrt n\)</span> (mm)</th>
+<th style="text-align: right;"><span class="math inline">\(\operatorname{MSE}(\overline X_n)\)</span> (mm<span class="math inline">\(^2\)</span>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0.060</td>
+<td style="text-align: right;">0.003600</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">144</td>
+<td style="text-align: right;">0.015</td>
+<td style="text-align: right;">0.000225</td>
+</tr>
+</tbody>
+</table>
+<p>A sample of 144 parts rather than 9 reduces the standard error by a factor of four. With known <span class="math inline">\(\sigma\)</span>, the exact <span class="math inline">\((1-\alpha)\)</span> confidence interval is</p>
+<p><span class="math display">\[
 \left[\overline X_n-z_{1-\alpha/2}\frac{0.18}{\sqrt n},
 \ \overline X_n+z_{1-\alpha/2}\frac{0.18}{\sqrt n}\right].
-$$
-
-The interval is random because $\overline X_n$ is random. **Coverage** refers to the proportion of intervals containing the fixed true $\mu$ over repeated sampling—not to a probability distribution assigned to $\mu$ after observing a single sample.
-
-::: {.callout-tip title="Exercise 4: confidence interval width"}
-For $\alpha=0.05$, calculate the total width of the confidence interval with known $\sigma=0.18$ for $n=9$ and $n=144$. Explain why the widths are deterministic in this example, even though the interval endpoints are random.
-:::
-
-# 5 Monte Carlo experiments: theory with a computer
-
-## 5.1 The basic design
-
-A **Monte Carlo experiment** approximates a theoretical quantity by repeated simulation under a stated data-generating mechanism. For estimator evaluation, one repetition consists of a *complete sample* of size $n$, followed by calculating the estimate.
-
-1. **Specify the population:** distribution $F$, its parameters, and the target $\theta(F)$.
-2. **Specify the estimator:** a function $g_n$ applied to each random sample.
-3. **Choose the design:** sample sizes $n$, number of replications $B$, and a reproducible random seed.
-4. **Repeat $B$ times:** generate fresh i.i.d. data of size $n$ and record $\widehat\theta_n^{(b)}$ for each $b=1,\ldots,B$.
-5. **Summarize:** compare the empirical sampling distribution, bias, variance, MSE, RMSE, or interval coverage with the theory.
-6. **Check numerical uncertainty:** Monte Carlo estimates have their own standard errors and must not be treated as exact numbers.
-
-## 5.2 Approximating bias, variance, and MSE
-
-Let $\widehat\theta^{(1)},\ldots,\widehat\theta^{(B)}$ be independent simulated estimates, and write $\overline{\widehat\theta}_B=B^{-1}\sum_{b=1}^B\widehat\theta^{(b)}$. Define
-
-$$
+\]</span></p>
+<p>The interval is random because <span class="math inline">\(\overline X_n\)</span> is random. <strong>Coverage</strong> refers to the proportion of intervals containing the fixed true <span class="math inline">\(\mu\)</span> over repeated sampling—not to a probability distribution assigned to <span class="math inline">\(\mu\)</span> after observing a single sample.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Exercise 4: confidence interval width">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Exercise 4: confidence interval width
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For <span class="math inline">\(\alpha=0.05\)</span>, calculate the total width of the confidence interval with known <span class="math inline">\(\sigma=0.18\)</span> for <span class="math inline">\(n=9\)</span> and <span class="math inline">\(n=144\)</span>. Explain why the widths are deterministic in this example, even though the interval endpoints are random.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="monte-carlo-experiments-theory-with-a-computer" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Monte Carlo experiments: theory with a computer</h1>
+<section id="the-basic-design" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="the-basic-design"><span class="header-section-number">5.1</span> The basic design</h2>
+<p>A <strong>Monte Carlo experiment</strong> approximates a theoretical quantity by repeated simulation under a stated data-generating mechanism. For estimator evaluation, one repetition consists of a <em>complete sample</em> of size <span class="math inline">\(n\)</span>, followed by calculating the estimate.</p>
+<ol type="1">
+<li><strong>Specify the population:</strong> distribution <span class="math inline">\(F\)</span>, its parameters, and the target <span class="math inline">\(\theta(F)\)</span>.</li>
+<li><strong>Specify the estimator:</strong> a function <span class="math inline">\(g_n\)</span> applied to each random sample.</li>
+<li><strong>Choose the design:</strong> sample sizes <span class="math inline">\(n\)</span>, number of replications <span class="math inline">\(B\)</span>, and a reproducible random seed.</li>
+<li><strong>Repeat <span class="math inline">\(B\)</span> times:</strong> generate fresh i.i.d. data of size <span class="math inline">\(n\)</span> and record <span class="math inline">\(\widehat\theta_n^{(b)}\)</span> for each <span class="math inline">\(b=1,\ldots,B\)</span>.</li>
+<li><strong>Summarize:</strong> compare the empirical sampling distribution, bias, variance, MSE, RMSE, or interval coverage with the theory.</li>
+<li><strong>Check numerical uncertainty:</strong> Monte Carlo estimates have their own standard errors and must not be treated as exact numbers.</li>
+</ol>
+</section>
+<section id="approximating-bias-variance-and-mse" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="approximating-bias-variance-and-mse"><span class="header-section-number">5.2</span> 5.2 Approximating bias, variance, and MSE</h2>
+<p>Let <span class="math inline">\(\widehat\theta^{(1)},\ldots,\widehat\theta^{(B)}\)</span> be independent simulated estimates, and write <span class="math inline">\(\overline{\widehat\theta}_B=B^{-1}\sum_{b=1}^B\widehat\theta^{(b)}\)</span>. Define</p>
+<p><span class="math display">\[
 \begin{aligned}
 \widehat{\operatorname{Bias}}_{MC}
-&=\overline{\widehat\theta}_B-\theta,\\
+&amp;=\overline{\widehat\theta}_B-\theta,\\
 \widehat{\operatorname{Var}}_{MC}
-&=\frac1B\sum_{b=1}^B
+&amp;=\frac1B\sum_{b=1}^B
   \left(\widehat\theta^{(b)}-\overline{\widehat\theta}_B\right)^2,\\
 \widehat{\operatorname{MSE}}_{MC}
-&=\frac1B\sum_{b=1}^B(\widehat\theta^{(b)}-\theta)^2,\\
+&amp;=\frac1B\sum_{b=1}^B(\widehat\theta^{(b)}-\theta)^2,\\
 \widehat{\operatorname{RMSE}}_{MC}
-&=\sqrt{\widehat{\operatorname{MSE}}_{MC}}.
+&amp;=\sqrt{\widehat{\operatorname{MSE}}_{MC}}.
 \end{aligned}
-$$
-
-Using $1/B$ for the Monte Carlo variance gives the **exact finite-$B$ identity**
-
-$$
+\]</span></p>
+<p>Using <span class="math inline">\(1/B\)</span> for the Monte Carlo variance gives the <strong>exact finite-<span class="math inline">\(B\)</span> identity</strong></p>
+<p><span class="math display">\[
 \widehat{\operatorname{MSE}}_{MC}
 =\widehat{\operatorname{Var}}_{MC}
 +\widehat{\operatorname{Bias}}_{MC}^{\,2}.
-$$
-
-For an unbiased estimate of the *variance across replications*, software usually uses $1/(B-1)$ instead. That convention is also valid, but the displayed decomposition is then no longer an exact identity at finite $B$.
-
-::: {#mc-estimator-function .cell execution_count=7}
-``` {.python .cell-code}
-def mc_summary(estimates, truth):
-    """Summarize independent simulated estimates of one parameter."""
-    estimates = np.asarray(estimates, dtype=float)
-    error = estimates - truth
-    return {
-        "bias": error.mean(),
-        "variance": estimates.var(ddof=0),
-        "mse": np.mean(error**2),
-        "rmse": np.sqrt(np.mean(error**2)),
-        "mcse_of_mean": estimates.std(ddof=1) / np.sqrt(len(estimates))
-    }
-```
-:::
-
-
-::: {.callout-note title="Monte Carlo standard error (MCSE)"}
-The **standard error of the estimator** describes variation across actual data samples of size $n$. The **Monte Carlo standard error** describes how accurately a computer experiment with $B$ simulated samples approximates a summary of that sampling distribution.
-
-For a simulated mean of estimates, a suitable MCSE estimate is
-
-$$
+\]</span></p>
+<p>For an unbiased estimate of the <em>variance across replications</em>, software usually uses <span class="math inline">\(1/(B-1)\)</span> instead. That convention is also valid, but the displayed decomposition is then no longer an exact identity at finite <span class="math inline">\(B\)</span>.</p>
+<div id="mc-estimator-function" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mc_summary(estimates, truth):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Summarize independent simulated estimates of one parameter."""</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    estimates <span class="op">=</span> np.asarray(estimates, dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    error <span class="op">=</span> estimates <span class="op">-</span> truth</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"bias"</span>: error.mean(),</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"variance"</span>: estimates.var(ddof<span class="op">=</span><span class="dv">0</span>),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"mse"</span>: np.mean(error<span class="op">**</span><span class="dv">2</span>),</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"rmse"</span>: np.sqrt(np.mean(error<span class="op">**</span><span class="dv">2</span>)),</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"mcse_of_mean"</span>: estimates.std(ddof<span class="op">=</span><span class="dv">1</span>) <span class="op">/</span> np.sqrt(<span class="bu">len</span>(estimates))</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Monte Carlo standard error (MCSE)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Monte Carlo standard error (MCSE)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <strong>standard error of the estimator</strong> describes variation across actual data samples of size <span class="math inline">\(n\)</span>. The <strong>Monte Carlo standard error</strong> describes how accurately a computer experiment with <span class="math inline">\(B\)</span> simulated samples approximates a summary of that sampling distribution.</p>
+<p>For a simulated mean of estimates, a suitable MCSE estimate is</p>
+<p><span class="math display">\[
 \widehat{\operatorname{MCSE}}\left(\overline{\widehat\theta}_B\right)
 =\frac{s_{MC}}{\sqrt B},
 \quad
 s_{MC}^2=\frac1{B-1}\sum_{b=1}^B
   \left(\widehat\theta^{(b)}-\overline{\widehat\theta}_B\right)^2.
-$$
-
-This formula requires a finite variance across independent replications. It also applies to the simulated bias because subtracting the known constant $\theta$ does not change its MCSE.
-:::
-
-### Experiment 5: Monte Carlo error versus sample size
-
-Suppose $X_i\sim N(2,1)$ and we estimate $\mu=2$ with $\overline X_n$. Its bias is exactly zero and its standard error is $1/\sqrt n$. Estimate its bias using different values of $B$ while keeping $n=20$ fixed.
-
-::: {#tbl-monte-carlo-uncertainty .cell tbl-cap='Estimated bias and its Monte Carlo standard error. The true bias is zero; more replications make the simulation estimate less noisy.' execution_count=8}
-``` {.python .cell-code}
-n = 20
-rows = []
-for B in [200, 1_000, 10_000]:
-    estimates = rng.normal(loc=2, scale=1, size=(B, n)).mean(axis=1)
-    result = mc_summary(estimates, truth=2)
-    rows.append({"n": n, "B": B, "MC bias": result["bias"],
-                 "MCSE of bias": result["mcse_of_mean"],
-                 "Empirical SE of estimator": np.std(estimates, ddof=1),
-                 "Theoretical SE": 1 / np.sqrt(n)})
-display(pd.DataFrame(rows).round(4))
-```
-
-::: {.cell-output .cell-output-display}
-```{=html}
+\]</span></p>
+<p>This formula requires a finite variance across independent replications. It also applies to the simulated bias because subtracting the known constant <span class="math inline">\(\theta\)</span> does not change its MCSE.</p>
+</div>
+</div>
+<section id="experiment-5-monte-carlo-error-versus-sample-size" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="experiment-5-monte-carlo-error-versus-sample-size"><span class="header-section-number">5.2.1</span> Experiment 5: Monte Carlo error versus sample size</h3>
+<p>Suppose <span class="math inline">\(X_i\sim N(2,1)\)</span> and we estimate <span class="math inline">\(\mu=2\)</span> with <span class="math inline">\(\overline X_n\)</span>. Its bias is exactly zero and its standard error is <span class="math inline">\(1/\sqrt n\)</span>. Estimate its bias using different values of <span class="math inline">\(B\)</span> while keeping <span class="math inline">\(n=20\)</span> fixed.</p>
+<div class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> []</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> B <span class="kw">in</span> [<span class="dv">200</span>, <span class="dv">1_000</span>, <span class="dv">10_000</span>]:</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    estimates <span class="op">=</span> rng.normal(loc<span class="op">=</span><span class="dv">2</span>, scale<span class="op">=</span><span class="dv">1</span>, size<span class="op">=</span>(B, n)).mean(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> mc_summary(estimates, truth<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    rows.append({<span class="st">"n"</span>: n, <span class="st">"B"</span>: B, <span class="st">"MC bias"</span>: result[<span class="st">"bias"</span>],</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"MCSE of bias"</span>: result[<span class="st">"mcse_of_mean"</span>],</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Empirical SE of estimator"</span>: np.std(estimates, ddof<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Theoretical SE"</span>: <span class="dv">1</span> <span class="op">/</span> np.sqrt(n)})</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>display(pd.DataFrame(rows).<span class="bu">round</span>(<span class="dv">4</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="tbl-monte-carlo-uncertainty" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="7">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-monte-carlo-uncertainty-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: Estimated bias and its Monte Carlo standard error. The true bias is zero; more replications make the simulation estimate less noisy.
+</figcaption>
+<div aria-describedby="tbl-monte-carlo-uncertainty-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display">
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-
-<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe cell caption-top table table-sm table-striped small" data-border="1">
 <thead>
-<tr class="header" style="text-align: right;">
+<tr class="header">
 <th data-quarto-table-cell-role="th"></th>
 <th data-quarto-table-cell-role="th">n</th>
 <th data-quarto-table-cell-role="th">B</th>
@@ -1086,106 +1075,91 @@ display(pd.DataFrame(rows).round(4))
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
+<th data-quarto-table-cell-role="th">0</th>
 <td>20</td>
 <td>200</td>
-<td>-0.0090</td>
-<td>0.0156</td>
-<td>0.2201</td>
+<td>0.0119</td>
+<td>0.0144</td>
+<td>0.2031</td>
 <td>0.2236</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
+<th data-quarto-table-cell-role="th">1</th>
 <td>20</td>
 <td>1000</td>
-<td>0.0076</td>
+<td>-0.0078</td>
 <td>0.0072</td>
-<td>0.2292</td>
+<td>0.2267</td>
 <td>0.2236</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
+<th data-quarto-table-cell-role="th">2</th>
 <td>20</td>
 <td>10000</td>
-<td>-0.0028</td>
+<td>-0.0002</td>
 <td>0.0023</td>
-<td>0.2257</td>
+<td>0.2251</td>
 <td>0.2236</td>
 </tr>
 </tbody>
 </table>
 
 </div>
-```
-:::
-:::
-
-
-If we repeat this *whole experiment*, the displayed Monte Carlo estimates will change. Moreover, increasing $B$ does not reduce the actual standard error of $\overline X_n$; that requires increasing $n$.
-
-## 5.3 Estimating interval coverage
-
-We can also evaluate uncertainty procedures through simulation. If $I^{(b)}$ is the interval computed from the $b$-th sample, define the coverage indicator
-
-$$C_b=\boldsymbol{1}\{\theta\in I^{(b)}\}.$$
-
-The simulated **coverage** is $\widehat c=B^{-1}\sum_b C_b$. As the indicators are Bernoulli variables from independent replications, their estimated Monte Carlo standard error is
-
-$$
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>If we repeat this <em>whole experiment</em>, the displayed Monte Carlo estimates will change. Moreover, increasing <span class="math inline">\(B\)</span> does not reduce the actual standard error of <span class="math inline">\(\overline X_n\)</span>; that requires increasing <span class="math inline">\(n\)</span>.</p>
+</section>
+</section>
+<section id="estimating-interval-coverage" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="estimating-interval-coverage"><span class="header-section-number">5.3</span> Estimating interval coverage</h2>
+<p>We can also evaluate uncertainty procedures through simulation. If <span class="math inline">\(I^{(b)}\)</span> is the interval computed from the <span class="math inline">\(b\)</span>-th sample, define the coverage indicator</p>
+<p><span class="math display">\[C_b=\boldsymbol{1}\{\theta\in I^{(b)}\}.\]</span></p>
+<p>The simulated <strong>coverage</strong> is <span class="math inline">\(\widehat c=B^{-1}\sum_b C_b\)</span>. As the indicators are Bernoulli variables from independent replications, their estimated Monte Carlo standard error is</p>
+<p><span class="math display">\[
 \widehat{\operatorname{MCSE}}(\widehat c)
 \approx\sqrt{\frac{\widehat c(1-\widehat c)}{B}}.
-$$
-
-This uncertainty concerns the *estimated coverage*. It is not the confidence interval's width or the standard error of the original sample mean.
-
-### Experiment 6: coverage under exact normality and skewness
-
-We construct nominal 95% *normal-based* intervals for means from (a) a normal population and (b) an exponential population. Both populations have mean $1$ and standard deviation $1$. For each population we contrast an interval using the **known** standard deviation with the more practical version **plugging in $S_n$**, keeping the *normal* critical value in both cases. The known-standard-deviation interval has exact 95% coverage under normal sampling. The plug-in version is only asymptotically justified, even under normal sampling, and can behave poorly at small $n$.
-
-::: {#tbl-coverage .cell tbl-cap='Simulated coverage of 95% normal-based intervals with known versus estimated standard deviation. Even normal data do not make the plug-in z-interval exact at small n.' execution_count=9}
-``` {.python .cell-code}
-B = 12_000
-z = stats.norm.ppf(0.975)
-rows = []
-for distribution in ["Normal", "Exponential"]:
-    for n in [5, 20, 100]:
-        if distribution == "Normal":
-            samples = rng.normal(1, 1, size=(B, n))
-        else:
-            samples = rng.exponential(scale=1, size=(B, n))
-        means = samples.mean(axis=1)
-        for sd_method, scale in [("Known SD", np.ones(B)),
-                                 ("Estimated SD", samples.std(axis=1, ddof=1))]:
-            half_width = z * scale / np.sqrt(n)
-            covered = (means - half_width <= 1) & (1 <= means + half_width)
-            c_hat = covered.mean()
-            rows.append({"Population": distribution, "n": n,
-                         "SD used": sd_method, "Coverage": c_hat,
-                         "MCSE": np.sqrt(c_hat * (1 - c_hat) / B)})
-coverage_results = pd.DataFrame(rows)
-display(coverage_results.round(4))
-```
-
-::: {.cell-output .cell-output-display}
-```{=html}
+\]</span></p>
+<p>This uncertainty concerns the <em>estimated coverage</em>. It is not the confidence interval’s width or the standard error of the original sample mean.</p>
+<section id="experiment-6-coverage-under-exact-normality-and-skewness" class="level3" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="experiment-6-coverage-under-exact-normality-and-skewness"><span class="header-section-number">5.3.1</span> Experiment 6: coverage under exact normality and skewness</h3>
+<p>We construct nominal 95% <em>normal-based</em> intervals for means from (a) a normal population and (b) an exponential population. Both populations have mean <span class="math inline">\(1\)</span> and standard deviation <span class="math inline">\(1\)</span>. For each population we contrast an interval using the <strong>known</strong> standard deviation with the more practical version <strong>plugging in <span class="math inline">\(S_n\)</span></strong>, keeping the <em>normal</em> critical value in both cases. The known-standard-deviation interval has exact 95% coverage under normal sampling. The plug-in version is only asymptotically justified, even under normal sampling, and can behave poorly at small <span class="math inline">\(n\)</span>.</p>
+<div class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> <span class="dv">12_000</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> stats.norm.ppf(<span class="fl">0.975</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> []</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> distribution <span class="kw">in</span> [<span class="st">"Normal"</span>, <span class="st">"Exponential"</span>]:</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> n <span class="kw">in</span> [<span class="dv">5</span>, <span class="dv">20</span>, <span class="dv">100</span>]:</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> distribution <span class="op">==</span> <span class="st">"Normal"</span>:</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            samples <span class="op">=</span> rng.normal(<span class="dv">1</span>, <span class="dv">1</span>, size<span class="op">=</span>(B, n))</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>            samples <span class="op">=</span> rng.exponential(scale<span class="op">=</span><span class="dv">1</span>, size<span class="op">=</span>(B, n))</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        means <span class="op">=</span> samples.mean(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> sd_method, scale <span class="kw">in</span> [(<span class="st">"Known SD"</span>, np.ones(B)),</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                                 (<span class="st">"Estimated SD"</span>, samples.std(axis<span class="op">=</span><span class="dv">1</span>, ddof<span class="op">=</span><span class="dv">1</span>))]:</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>            half_width <span class="op">=</span> z <span class="op">*</span> scale <span class="op">/</span> np.sqrt(n)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>            covered <span class="op">=</span> (means <span class="op">-</span> half_width <span class="op">&lt;=</span> <span class="dv">1</span>) <span class="op">&amp;</span> (<span class="dv">1</span> <span class="op">&lt;=</span> means <span class="op">+</span> half_width)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>            c_hat <span class="op">=</span> covered.mean()</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>            rows.append({<span class="st">"Population"</span>: distribution, <span class="st">"n"</span>: n,</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"SD used"</span>: sd_method, <span class="st">"Coverage"</span>: c_hat,</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"MCSE"</span>: np.sqrt(c_hat <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> c_hat) <span class="op">/</span> B)})</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>coverage_results <span class="op">=</span> pd.DataFrame(rows)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>display(coverage_results.<span class="bu">round</span>(<span class="dv">4</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="tbl-coverage" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="8">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-coverage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3: Simulated coverage of 95% normal-based intervals with known versus estimated standard deviation. Even normal data do not make the plug-in z-interval exact at small n.
+</figcaption>
+<div aria-describedby="tbl-coverage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display">
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-
-<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe cell caption-top table table-sm table-striped small" data-border="1">
 <thead>
-<tr class="header" style="text-align: right;">
+<tr class="header">
 <th data-quarto-table-cell-role="th"></th>
 <th data-quarto-table-cell-role="th">Population</th>
 <th data-quarto-table-cell-role="th">n</th>
@@ -1196,71 +1170,71 @@ display(coverage_results.round(4))
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
+<th data-quarto-table-cell-role="th">0</th>
 <td>Normal</td>
 <td>5</td>
 <td>Known SD</td>
-<td>0.9498</td>
-<td>0.0020</td>
+<td>0.9535</td>
+<td>0.0019</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
+<th data-quarto-table-cell-role="th">1</th>
 <td>Normal</td>
 <td>5</td>
 <td>Estimated SD</td>
-<td>0.8786</td>
+<td>0.8788</td>
 <td>0.0030</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
+<th data-quarto-table-cell-role="th">2</th>
 <td>Normal</td>
 <td>20</td>
 <td>Known SD</td>
-<td>0.9488</td>
+<td>0.9501</td>
 <td>0.0020</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
+<th data-quarto-table-cell-role="th">3</th>
 <td>Normal</td>
 <td>20</td>
 <td>Estimated SD</td>
-<td>0.9358</td>
-<td>0.0022</td>
+<td>0.9339</td>
+<td>0.0023</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
+<th data-quarto-table-cell-role="th">4</th>
 <td>Normal</td>
 <td>100</td>
 <td>Known SD</td>
-<td>0.9511</td>
+<td>0.9472</td>
 <td>0.0020</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">5</td>
+<th data-quarto-table-cell-role="th">5</th>
 <td>Normal</td>
 <td>100</td>
 <td>Estimated SD</td>
-<td>0.9480</td>
-<td>0.0020</td>
+<td>0.9440</td>
+<td>0.0021</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">6</td>
+<th data-quarto-table-cell-role="th">6</th>
 <td>Exponential</td>
 <td>5</td>
 <td>Known SD</td>
-<td>0.9579</td>
-<td>0.0018</td>
+<td>0.9566</td>
+<td>0.0019</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">7</td>
+<th data-quarto-table-cell-role="th">7</th>
 <td>Exponential</td>
 <td>5</td>
 <td>Estimated SD</td>
-<td>0.8143</td>
+<td>0.8149</td>
 <td>0.0035</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">8</td>
+<th data-quarto-table-cell-role="th">8</th>
 <td>Exponential</td>
 <td>20</td>
 <td>Known SD</td>
@@ -1268,113 +1242,63 @@ display(coverage_results.round(4))
 <td>0.0019</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">9</td>
+<th data-quarto-table-cell-role="th">9</th>
 <td>Exponential</td>
 <td>20</td>
 <td>Estimated SD</td>
-<td>0.9034</td>
+<td>0.9056</td>
 <td>0.0027</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">10</td>
+<th data-quarto-table-cell-role="th">10</th>
 <td>Exponential</td>
 <td>100</td>
 <td>Known SD</td>
-<td>0.9507</td>
+<td>0.9509</td>
 <td>0.0020</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">11</td>
+<th data-quarto-table-cell-role="th">11</th>
 <td>Exponential</td>
 <td>100</td>
 <td>Estimated SD</td>
-<td>0.9377</td>
+<td>0.9359</td>
 <td>0.0022</td>
 </tr>
 </tbody>
 </table>
 
 </div>
-```
-:::
-:::
-
-
-A useful diagnostic is to ask whether the difference from $0.95$ is large relative to its MCSE. The difference between the two interval constructions is especially clear for $n=5$: estimating the standard deviation introduces an additional source of finite-sample approximation error. Under normal sampling, using a suitable $t$ rather than normal quantile would give an exact interval, but that refinement is not our focus here. If a coverage discrepancy is much larger than its MCSE, simply increasing Monte Carlo replications will not fix the underlying approximation error. Increasing *sample size $n$* may help, provided the LLN and CLT assumptions apply.
-
-::: {.callout-warning title="Do not confuse two sources of error"}
-A finite-sample approximation can be systematically inaccurate even if it has been simulated a million times. More Monte Carlo replications reduce *numerical simulation uncertainty*; they do not make an invalid statistical approximation valid.
-:::
-
-# 6 Coding lab (45 minutes): finite samples and repeated sampling
-
-Work through the questions in order. Use a fixed random seed, explain the statistical meaning of each quantity you calculate, and compare the output to the theoretical prediction. You can reuse `mc_summary` from Section 5.
-
-## Task A (10 minutes): build an estimator experiment
-
-1. Generate $B=5{,}000$ samples of size $n=10$ from $N(4,3^2)$ and calculate the sample mean of each sample.
-2. Estimate the bias, variance, MSE, and RMSE of the sample mean. Compare with $0$, $9/n$, $9/n$, and $3/\sqrt n$, respectively.
-3. Change $n$ to $40$ while holding $B$ fixed. Which quantities should become approximately one quarter as large, and which one half as large?
-
-::: {#lab-starter .cell execution_count=10}
-``` {.python .cell-code}
-rng_lab = np.random.default_rng(123)
-B, n, mu, sigma = 5_000, 10, 4.0, 3.0
-samples = rng_lab.normal(mu, sigma, size=(B, n))
-estimates = samples.mean(axis=1)
-print(mc_summary(estimates, truth=mu))
-# TODO: compare with the theoretical quantities, then repeat with n = 40.
-```
-:::
-
-
-## Task B (15 minutes): a biased estimator can have smaller MSE
-
-1. Generate $B=10{,}000$ samples from $N(0,1)$ of size $n=8$.
-2. Calculate both $\widetilde S_n^2$ and $S_n^2$ for every sample, using `np.var(..., axis=1, ddof=0)` and `ddof=1`.
-3. Approximate bias, variance, and MSE for both estimators. Check the identity $\widehat{\operatorname{MSE}}_{MC}=\widehat{\operatorname{Var}}_{MC}+\widehat{\operatorname{Bias}}_{MC}^2$.
-4. Explain why the estimator with smaller absolute bias need not have smaller MSE.
-
-## Task C (20 minutes): investigate confidence-interval coverage
-
-1. Repeat Experiment 6 with $n\in\{5,20,100\}$ and $B=10{,}000$ for exponentially distributed observations.
-2. Compare the coverage probabilities and their estimated MCSEs with the nominal level $0.95$.
-3. Compare using the *known* standard deviation with substituting the sample standard deviation $S_n$. Discuss the resulting changes. Remember that a normal critical value with an estimated standard error generally gives an **asymptotic**, not necessarily exact, interval.
-4. Explain why changing $B$ alone does not repair poor small-sample coverage.
-
-::: {.callout-tip title="Further exercises"}
-**Exercise 5 — Rates.** Starting from $\operatorname{Var}(\overline X_n)=\sigma^2/n$, use Chebyshev's inequality to show $\overline X_n-\mu=O_P(n^{-1/2})$. Why does this argument not apply to the Pareto example with shape $1.5$?
-
-**Exercise 6 — Design a simulation study.** You wish to compare the bias of an estimator for $n=10,30,100$. Explain why it makes sense to use the same number of replications $B$ for all three scenarios, and describe how you would report Monte Carlo uncertainty.
-
-**Exercise 7 — Challenge.** For Pareto observations with $x_m=1$ and $\alpha=1.5$, compare the median absolute error of $\overline X_n$ for $n=20,100,500$ using independent Monte Carlo repetitions. Why might the median absolute error be more informative here than the MSE?
-:::
-
-# 7 Summary
-
-The central ideas of the chapter can be condensed as follows:
-
-| Concept | Question it answers | Key expression |
-|:--|:--|:--|
-| Sampling distribution | How does the estimate change across fresh samples? | $\mathcal L(\widehat\theta_n)$ |
-| Bias | Is the estimator systematically off target? | $\mathbb E[\widehat\theta_n]-\theta$ |
-| Standard error | How much does it fluctuate across samples? | $\sqrt{\operatorname{Var}(\widehat\theta_n)}$ |
-| MSE | How large is the expected squared estimation error? | $\operatorname{Var}(\widehat\theta_n)+\operatorname{Bias}^2$ |
-| Consistency | Does the estimate concentrate at the target as $n$ increases? | $\widehat\theta_n\xrightarrow{P}\theta$ |
-| Convergence rate | How quickly does the stochastic error shrink? | $\overline X_n-\mu=O_P(n^{-1/2})$ (finite variance) |
-| Monte Carlo approximation | What can repeated synthetic samples tell us? | $B^{-1}\sum_{b=1}^B h(\widehat\theta^{(b)})$ |
-
-::: {.callout-important title="Central message"}
-**Statistical uncertainty** describes variation in an estimator because we observe only a finite sample. **Monte Carlo uncertainty** describes variation in numerical summaries because we simulate only a finite number of repetitions. We need theory and computation to understand both, and we must keep them separate.
-:::
-
-In the next chapter we move from single-parameter estimators to **linear regression**. Least-squares coefficients are also estimators with sampling distributions, bias, variance, and asymptotic properties. The ideas developed here therefore remain central throughout the course.
-
--->
-
-
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>A useful diagnostic is to ask whether the difference from <span class="math inline">\(0.95\)</span> is large relative to its MCSE. The difference between the two interval constructions is especially clear for <span class="math inline">\(n=5\)</span>: estimating the standard deviation introduces an additional source of finite-sample approximation error. Under normal sampling, using a suitable <span class="math inline">\(t\)</span> rather than normal quantile would give an exact interval, but that refinement is not our focus here. If a coverage discrepancy is much larger than its MCSE, simply increasing Monte Carlo replications will not fix the underlying approximation error. Increasing <em>sample size <span class="math inline">\(n\)</span></em> may help, provided the LLN and CLT assumptions apply.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Do not confuse two sources of error">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Do not confuse two sources of error
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A finite-sample approximation can be systematically inaccurate even if it has been simulated a million times. More Monte Carlo replications reduce <em>numerical simulation uncertainty</em>; they do not make an invalid statistical approximation valid.</p>
+</div>
+</div>
 </section>
 </section>
+</section>
+<section id="coding-lab" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Coding Lab</h1>
+<p>Please find the Jupyter Notebook for the coding lab exercise of Chapter 2 below.</p>
+<a href="../notebooks/chapter2_coding_lab_students.ipynb" download="chapter2_coding_lab_students.ipynb" class="btn btn-primary">
+   📥 Download Coding Lab (Jupyter Notebook)
+</a>
+
+
 </section>
 
 </main> <!-- /main -->
