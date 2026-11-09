@@ -1,0 +1,1923 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Linear Regression as a Statistical Model – Computer-aided statistical analysis</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5a69534754b34dc075d7f980428dccec.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../lectures/CH3.html">Part II — Linear models</a></li><li class="breadcrumb-item"><a href="../lectures/CH3.html">Ch. 3 — Linear Regression</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Computer-aided statistical analysis</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Course overview</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part I — Statistical foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../lectures/CH0.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 0 — Computation and statistics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../lectures/CH1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 1 — Probability essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../lectures/CH2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 2 — Estimation and Monte Carlo</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part II — Linear models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../lectures/CH3.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Ch. 3 — Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 4 — Regression diagnostics</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 5 — Predictive performance</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part III — Selection and resampling</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 6 — Model selection</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 7 — Cross-validation and resampling</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 8 — Regularization</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 9 — Flexible regression</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part IV — GLMs and integration</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 10 — GLMs and logistic regression</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 11 — Classification</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 12 — Count regression and diagnostics</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Ch. 13 — Integration and review</span>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link active" data-scroll-target="#learning-goals">Learning goals</a></li>
+  <li><a href="#from-conditional-expectation-to-the-linear-model" id="toc-from-conditional-expectation-to-the-linear-model" class="nav-link" data-scroll-target="#from-conditional-expectation-to-the-linear-model"><span class="header-section-number">1</span> From conditional expectation to the linear model</a>
+  <ul class="collapse">
+  <li><a href="#example-bordeaux-wine-prices" id="toc-example-bordeaux-wine-prices" class="nav-link" data-scroll-target="#example-bordeaux-wine-prices"><span class="header-section-number">1.1</span> Example: Bordeaux wine prices</a></li>
+  <li><a href="#the-linear-model-as-an-assumption-about-a-conditional-expectation" id="toc-the-linear-model-as-an-assumption-about-a-conditional-expectation" class="nav-link" data-scroll-target="#the-linear-model-as-an-assumption-about-a-conditional-expectation"><span class="header-section-number">1.2</span> The linear model as an assumption about a conditional expectation</a></li>
+  <li><a href="#from-one-observation-to-the-matrix-model" id="toc-from-one-observation-to-the-matrix-model" class="nav-link" data-scroll-target="#from-one-observation-to-the-matrix-model"><span class="header-section-number">1.3</span> From one observation to the matrix model</a></li>
+  <li><a href="#estimation-by-ordinary-least-squares" id="toc-estimation-by-ordinary-least-squares" class="nav-link" data-scroll-target="#estimation-by-ordinary-least-squares"><span class="header-section-number">1.4</span> Estimation by ordinary least squares</a></li>
+  </ul></li>
+  <li><a href="#properties-of-the-ols-estimator" id="toc-properties-of-the-ols-estimator" class="nav-link" data-scroll-target="#properties-of-the-ols-estimator"><span class="header-section-number">2</span> Properties of the OLS estimator</a>
+  <ul class="collapse">
+  <li><a href="#unbiasedness-and-variance-conditional-on-the-design" id="toc-unbiasedness-and-variance-conditional-on-the-design" class="nav-link" data-scroll-target="#unbiasedness-and-variance-conditional-on-the-design"><span class="header-section-number">2.1</span> Unbiasedness and variance, conditional on the design</a></li>
+  <li><a href="#what-happens-without-normally-distributed-errors" id="toc-what-happens-without-normally-distributed-errors" class="nav-link" data-scroll-target="#what-happens-without-normally-distributed-errors"><span class="header-section-number">2.2</span> What happens without normally distributed errors?</a></li>
+  <li><a href="#tests-confidence-intervals-and-p-values" id="toc-tests-confidence-intervals-and-p-values" class="nav-link" data-scroll-target="#tests-confidence-intervals-and-p-values"><span class="header-section-number">2.3</span> Tests, confidence intervals, and <span class="math inline">\(p\)</span>-values</a></li>
+  <li><a href="#the-fitted-bordeaux-regression" id="toc-the-fitted-bordeaux-regression" class="nav-link" data-scroll-target="#the-fitted-bordeaux-regression"><span class="header-section-number">2.4</span> The fitted Bordeaux regression</a></li>
+  </ul></li>
+  <li><a href="#measuring-and-testing-model-fit" id="toc-measuring-and-testing-model-fit" class="nav-link" data-scroll-target="#measuring-and-testing-model-fit"><span class="header-section-number">3</span> Measuring and Testing Model Fit</a>
+  <ul class="collapse">
+  <li><a href="#measures-of-model-fit" id="toc-measures-of-model-fit" class="nav-link" data-scroll-target="#measures-of-model-fit"><span class="header-section-number">3.1</span> Measures of Model Fit</a></li>
+  <li><a href="#testing-model-fit-the-partial-f-test" id="toc-testing-model-fit-the-partial-f-test" class="nav-link" data-scroll-target="#testing-model-fit-the-partial-f-test"><span class="header-section-number">3.2</span> Testing Model Fit: The Partial <span class="math inline">\(F\)</span>-Test</a>
+  <ul class="collapse">
+  <li><a href="#finite-sample-distribution" id="toc-finite-sample-distribution" class="nav-link" data-scroll-target="#finite-sample-distribution"><span class="header-section-number">3.2.1</span> Finite-Sample Distribution</a></li>
+  <li><a href="#asymptotic-distribution" id="toc-asymptotic-distribution" class="nav-link" data-scroll-target="#asymptotic-distribution"><span class="header-section-number">3.2.2</span> Asymptotic Distribution</a></li>
+  <li><a href="#the-overall-f-test" id="toc-the-overall-f-test" class="nav-link" data-scroll-target="#the-overall-f-test"><span class="header-section-number">3.2.3</span> The Overall <span class="math inline">\(F\)</span>-Test</a></li>
+  </ul></li>
+  <li><a href="#application-explaining-wine-prices" id="toc-application-explaining-wine-prices" class="nav-link" data-scroll-target="#application-explaining-wine-prices"><span class="header-section-number">3.3</span> Application: Explaining Wine Prices</a></li>
+  </ul></li>
+  <li><a href="#predicting-the-mean-and-predicting-a-new-observation" id="toc-predicting-the-mean-and-predicting-a-new-observation" class="nav-link" data-scroll-target="#predicting-the-mean-and-predicting-a-new-observation"><span class="header-section-number">4</span> Predicting the mean and predicting a new observation</a></li>
+  <li><a href="#troubleshooting-and-diagnostics" id="toc-troubleshooting-and-diagnostics" class="nav-link" data-scroll-target="#troubleshooting-and-diagnostics"><span class="header-section-number">5</span> Troubleshooting and Diagnostics</a>
+  <ul class="collapse">
+  <li><a href="#interactions" id="toc-interactions" class="nav-link" data-scroll-target="#interactions"><span class="header-section-number">5.1</span> Interactions</a></li>
+  <li><a href="#nonlinear-conditional-means" id="toc-nonlinear-conditional-means" class="nav-link" data-scroll-target="#nonlinear-conditional-means"><span class="header-section-number">5.2</span> Nonlinear conditional means</a></li>
+  <li><a href="#outliers-leverage-and-influential-vintages" id="toc-outliers-leverage-and-influential-vintages" class="nav-link" data-scroll-target="#outliers-leverage-and-influential-vintages"><span class="header-section-number">5.3</span> Outliers, leverage, and influential vintages</a></li>
+  <li><a href="#collinearity-and-identifiability" id="toc-collinearity-and-identifiability" class="nav-link" data-scroll-target="#collinearity-and-identifiability"><span class="header-section-number">5.4</span> Collinearity and identifiability</a></li>
+  <li><a href="#dependence" id="toc-dependence" class="nav-link" data-scroll-target="#dependence"><span class="header-section-number">5.5</span> Dependence</a></li>
+  </ul></li>
+  <li><a href="#coding-lab-exercise" id="toc-coding-lab-exercise" class="nav-link" data-scroll-target="#coding-lab-exercise"><span class="header-section-number">6</span> Coding Lab exercise</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../lectures/CH3.html">Part II — Linear models</a></li><li class="breadcrumb-item"><a href="../lectures/CH3.html">Ch. 3 — Linear Regression</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Linear Regression as a Statistical Model</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="learning-goals" class="level1 unnumbered">
+<h1 class="unnumbered">Learning goals</h1>
+<p>After this chapter, you should be able to:</p>
+<ul>
+<li>interpret a regression model as an assumption about the <strong>conditional distribution</strong> of a response, and especially its <strong>conditional expectation</strong>;</li>
+<li>state which assumptions justify least squares estimation, unbiasedness, standard errors, <span class="math inline">\(t\)</span>- and <span class="math inline">\(F\)</span>-tests, and prediction intervals;</li>
+<li>explain coefficient estimates and uncertainty in simple and multiple regression, including the meaning of <em>holding other predictors fixed</em>;</li>
+<li>interpret <span class="math inline">\(R^2\)</span>, residual standard error, confidence intervals, and prediction intervals without confusing in-sample fit with future predictive accuracy;</li>
+<li>recognize categorical regressors, interactions, and transformations as choices for the conditional-mean function;</li>
+<li>diagnose nonlinearity, unequal error variance, outliers, leverage, influence, and collinearity;</li>
+<li>use a small simulation to assess whether a regression inferential procedure behaves as its theory claims.</li>
+</ul>
+<p><strong>Reading:</strong> James et al.&nbsp;(2023), <em>An Introduction to Statistical Learning: with Applications in Python</em> (ISLP), Chapter 3 in full; selected conceptual material from Chapter 2 (prediction versus inference, reducible and irreducible error, model flexibility, and the distinction between training and test error). <a href="https://www.statlearning.com">Official book website</a>.</p>
+<p><a href="../slides/Slide_CH3.html">View slides in full screen</a></p>
+<iframe class="slide-deck" src="../slides/Slide_CH3.html" width="100%" height="500" allowfullscreen="">
+</iframe>
+</section>
+<section id="from-conditional-expectation-to-the-linear-model" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> From conditional expectation to the linear model</h1>
+<section id="example-bordeaux-wine-prices" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="example-bordeaux-wine-prices"><span class="header-section-number">1.1</span> Example: Bordeaux wine prices</h2>
+<p>Imagine that you manage a business buying and selling Bordeaux wine. The value of a vintage becomes clear only over time, but its weather conditions are already known shortly after harvest. Could these measurements help you value a wine before its eventual market price is known?</p>
+<p>This is a real empirical question. Ashenfelter, Ashmore, and Lalonde (1995) studied how weather and vintage age were associated with Bordeaux wine prices. The analysis was later discussed by Ashenfelter (2008), <a href="https://doi.org/10.1111/j.1468-0297.2008.02148.x"><em>Predicting the Quality and Prices of Bordeaux Wine</em></a>.</p>
+<p>We use data on <strong>27 historical Bordeaux vintages (1952–1980)</strong>. One observation represents <strong>one vintage</strong>, not an individual bottle or transaction.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable in the data</th>
+<th>Meaning</th>
+<th>Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Price</code></td>
+<td>Logarithm of a historical wine-price index (our response <span class="math inline">\(Y\)</span>)</td>
+<td>log-price units</td>
+</tr>
+<tr class="even">
+<td><code>AGST</code></td>
+<td>Average growing-season temperature</td>
+<td><span class="math inline">\(^\circ\)</span>C</td>
+</tr>
+<tr class="odd">
+<td><code>WinterRain</code></td>
+<td>Winter rainfall</td>
+<td>mm</td>
+</tr>
+<tr class="even">
+<td><code>HarvestRain</code></td>
+<td>Rainfall around harvest</td>
+<td>mm</td>
+</tr>
+<tr class="odd">
+<td><code>Age</code></td>
+<td>Age of the vintage at the historical reference date</td>
+<td>years</td>
+</tr>
+</tbody>
+</table>
+<p>The variable <code>Price</code> <strong>is already on the logarithmic scale</strong>; we must not apply the logarithm again. Temperature, rainfall, and age are quantitative predictors. The CSV also includes <code>Year</code> and <code>FrancePop</code>, which are not used in our main model.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Source and replication">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Source and replication
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The course file <code>data/wine.csv</code> is a copy of the <a href="https://raw.githubusercontent.com/egarpor/handy/master/datasets/wine.csv">public 27-vintage dataset</a>. The <a href="https://egarpor.github.io/SSS2-UC3M/multlin-examps.html">published numerical analysis</a> provides coefficient estimates and standard errors for comparison.</p>
+</div>
+</div>
+<div id="cell-load-bordeaux-data" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>source <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/egarpor/handy/master/datasets/wine.csv"</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>paths <span class="op">=</span> [Path(<span class="st">"../data/wine.csv"</span>), Path(<span class="st">"data/wine.csv"</span>)]</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>local_data <span class="op">=</span> <span class="bu">next</span>((path <span class="cf">for</span> path <span class="kw">in</span> paths <span class="cf">if</span> path.is_file()), <span class="va">None</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>wine <span class="op">=</span> pd.read_csv(local_data <span class="cf">if</span> local_data <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="cf">else</span> source)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>required <span class="op">=</span> {<span class="st">"Year"</span>, <span class="st">"Price"</span>, <span class="st">"AGST"</span>, <span class="st">"WinterRain"</span>, <span class="st">"HarvestRain"</span>, <span class="st">"Age"</span>}</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> required.issubset(wine.columns)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(wine) <span class="op">==</span> <span class="dv">27</span> <span class="kw">and</span> <span class="kw">not</span> wine[<span class="bu">list</span>(required)].isna().<span class="bu">any</span>().<span class="bu">any</span>()</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(wine[[<span class="st">"Year"</span>, <span class="st">"Price"</span>, <span class="st">"AGST"</span>, <span class="st">"WinterRain"</span>, <span class="st">"HarvestRain"</span>, <span class="st">"Age"</span>]].head().to_string(index<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">4</span>))</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>ax.scatter(wine[<span class="st">"AGST"</span>], wine[<span class="st">"Price"</span>], s<span class="op">=</span><span class="dv">30</span>, alpha<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Average growing-season temperature (°C)"</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>       ylabel<span class="op">=</span><span class="st">"Log wine-price index"</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Year  Price    AGST  WinterRain  HarvestRain  Age
+ 1952 7.4950 17.1167         600          160   31
+ 1953 8.0393 16.7333         690           80   30
+ 1955 7.6858 17.1500         502          130   28
+ 1957 6.9845 16.1333         420          110   26
+ 1958 6.7772 16.4167         582          187   25</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div id="load-bordeaux-data" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="CH3_files/figure-html/load-bordeaux-data-output-2.png" width="589" height="356" class="figure-img"></p>
+<figcaption>Log wine price and growing-season temperature for the 27 Bordeaux vintages.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Taking the role of a wine merchant, we have <strong>two questions</strong>:</p>
+<ul>
+<li><strong>Q1 — Prediction:</strong> Given the weather conditions and age of a vintage, can we predict its eventual log price? How uncertain would a prediction for a <em>new</em> vintage be?</li>
+<li><strong>Q2 — Inference:</strong> Which weather variables are associated with log price <strong>after accounting for the others</strong>? In particular, could some regression coefficients be zero?</li>
+</ul>
+<p>The first asks about a future outcome; the second asks what the observed data tell us about an underlying relationship. Both require a statistical model.</p>
+</section>
+<section id="the-linear-model-as-an-assumption-about-a-conditional-expectation" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="the-linear-model-as-an-assumption-about-a-conditional-expectation"><span class="header-section-number">1.2</span> The linear model as an assumption about a conditional expectation</h2>
+<p>From Chapter 1, the best predictor under squared-error loss is the <strong>conditional expectation</strong> <span class="math inline">\(m(x)=\mathbb E[Y\mid X=x]\)</span>. We generally do not know its shape. With 27 observations and four predictors, estimating an unrestricted function would be difficult. We therefore make a restrictive, but easily interpretable, assumption: <strong>the conditional mean is linear in the predictors</strong>.</p>
+<p>For a vintage <span class="math inline">\(i\)</span>, our model is</p>
+<p><span class="math display">\[
+\boxed{\begin{aligned}
+\mathbb E[Y_i\mid \mathrm{AGST}_i,\mathrm{WinterRain}_i,\mathrm{HarvestRain}_i,\mathrm{Age}_i]
+={}&amp;\beta_0+\beta_1\mathrm{AGST}_i+\beta_2\mathrm{WinterRain}_i\\
+&amp;+\beta_3\mathrm{HarvestRain}_i+\beta_4\mathrm{Age}_i.
+\end{aligned}}
+\]</span></p>
+<p>The coefficients are unknown <strong>population parameters</strong>. For example, <span class="math inline">\(\beta_1\)</span> describes the change in <em>expected log price</em> associated with a one-degree increase in growing-season temperature <strong>at the same rainfall and age</strong>. It describes an association, not necessarily a causal effect. A zero coefficient means that the corresponding predictor has no <em>additional linear contribution to this conditional mean</em> after accounting for the other predictors, <strong>if the model is correctly specified</strong>.</p>
+<p>To write the model more simply, put the intercept directly into the predictor vector:</p>
+<p><span class="math display">\[
+X_i=\begin{pmatrix}
+1\\ \mathrm{AGST}_i\\ \mathrm{WinterRain}_i\\ \mathrm{HarvestRain}_i\\ \mathrm{Age}_i
+\end{pmatrix},
+\qquad
+\beta=\begin{pmatrix}\beta_0\\\beta_1\\\beta_2\\\beta_3\\\beta_4\end{pmatrix}.
+\]</span></p>
+<p>Then the entire conditional-mean assumption is just</p>
+<p><span class="math display">\[
+\boxed{\mathbb E[Y_i\mid X_i]=X_i^\top\beta.}
+\]</span></p>
+<p>More generally, with <span class="math inline">\(p\)</span> predictors we use <span class="math inline">\(X_i=(1,X_{i1},\ldots,X_{ip})^\top\)</span> and <span class="math inline">\(\beta\in\mathbb R^{p+1}\)</span>. <strong>The first entry of <span class="math inline">\(X_i\)</span> is always 1</strong>, so we do not need a second symbol for an augmented vector. In our wine example, <span class="math inline">\(p=4\)</span>.</p>
+<p>Define the (unobserved) error by <span class="math inline">\(\varepsilon_i=Y_i-X_i^\top\beta\)</span>. The model is equivalent to</p>
+<p><span class="math display">\[
+\boxed{Y_i=X_i^\top\beta+\varepsilon_i,
+\qquad \mathbb E[\varepsilon_i\mid X_i]=0.}
+\]</span></p>
+<p>If the stated linear expression really is the conditional expectation, the zero-conditional-mean property follows from Chapter 1. Conversely, postulating the equation together with that property imposes the linear conditional-mean model. <strong>Neither assumption alone says that the errors are normal or have constant variance.</strong></p>
+</section>
+<section id="from-one-observation-to-the-matrix-model" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="from-one-observation-to-the-matrix-model"><span class="header-section-number">1.3</span> From one observation to the matrix model</h2>
+<p>Suppose we observe <span class="math inline">\(n\)</span> pairs <span class="math inline">\((X_1,Y_1),\ldots,(X_n,Y_n)\)</span>. In the introductory theory we treat these pairs as i.i.d.; the 27 historical vintages are <em>not</em> literally a random sample from all possible years, so their dependence is a question to revisit in the diagnostics.</p>
+<p>Stack the observations:</p>
+<p><span class="math display">\[
+\mathbf Y=\begin{pmatrix}Y_1\\\vdots\\Y_n\end{pmatrix},
+\qquad
+\mathbf X=\begin{pmatrix}X_1^\top\\\vdots\\X_n^\top\end{pmatrix},
+\qquad
+\boldsymbol\varepsilon=\begin{pmatrix}\varepsilon_1\\\vdots\\\varepsilon_n\end{pmatrix}.
+\]</span></p>
+<p>The dimensions are <span class="math inline">\(\mathbf Y,\boldsymbol\varepsilon\in\mathbb R^n\)</span>, <span class="math inline">\(\mathbf X\in\mathbb R^{n\times(p+1)}\)</span> and <span class="math inline">\(\beta\in\mathbb R^{p+1}\)</span>. For Bordeaux, <span class="math inline">\(\mathbf X\)</span> is a <span class="math inline">\(27\times5\)</span> matrix. We have arrived at the familiar <strong>matrix–vector regression model</strong>:</p>
+<p><span class="math display">\[
+\boxed{\mathbf Y=\mathbf X\beta+\boldsymbol\varepsilon.}
+\]</span></p>
+<p>For conditional inference on the entire observed design, we use <span class="math inline">\(\mathbb E[\boldsymbol\varepsilon\mid\mathbf X]=0\)</span>. This holds, for example, for independent observation pairs with the individual zero-conditional-mean property above; in dependent data it requires separate justification.</p>
+</section>
+<section id="estimation-by-ordinary-least-squares" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="estimation-by-ordinary-least-squares"><span class="header-section-number">1.4</span> Estimation by ordinary least squares</h2>
+<p>We already know the computational principle of least squares. With <span class="math inline">\(n&gt;p+1\)</span> and full column rank of <span class="math inline">\(\mathbf X\)</span>, the ordinary least squares (OLS) estimator is</p>
+<p><span class="math display">\[
+\begin{aligned}
+\widehat\beta
+&amp;=\underset{b\in\mathbb R^{p+1}}{\arg\min}\|\mathbf Y-\mathbf Xb\|_2^2\\
+&amp;=\underset{b\in\mathbb R^{p+1}}{\arg\min}\sum_{i=1}^n(Y_i-X_i^\top b)^2
+=(\mathbf X^\top\mathbf X)^{-1}\mathbf X^\top\mathbf Y.
+\end{aligned}
+\]</span></p>
+<p>Its fitted values and <strong>residuals</strong> are</p>
+<p><span class="math display">\[
+\widehat Y_i=X_i^\top\widehat\beta,
+\qquad e_i=Y_i-\widehat Y_i,
+\qquad \mathbf e=\mathbf Y-\mathbf X\widehat\beta.
+\]</span></p>
+<p>We use <span class="math inline">\(e_i\)</span> for residuals to distinguish them from the <strong>population errors</strong> <span class="math inline">\(\varepsilon_i=Y_i-X_i^\top\beta\)</span>. Residuals are observable after fitting; population errors are not. OLS is <strong>best linear unbiased (BLUE)</strong> under the Gauss–Markov assumptions (full rank, zero conditional error mean, and conditionally uncorrelated errors with common variance). <em>Best</em> means smallest conditional variance among estimators that are <strong>linear in <span class="math inline">\(\mathbf Y\)</span> and conditionally unbiased</strong>; it does not mean best prediction under every model, and normality is not required.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Exercise: a familiar calculation">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Exercise: a familiar calculation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Verify that differentiating <span class="math inline">\(\|\mathbf Y-\mathbf Xb\|_2^2\)</span> leads to the normal equations <span class="math inline">\(\mathbf X^\top\mathbf X\widehat\beta=\mathbf X^\top\mathbf Y\)</span>. Why is full column rank needed for the displayed inverse?</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled" title="Keep these quantities distinct">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Keep these quantities distinct
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Population conditional mean:</strong> <span class="math inline">\(m(x)=x^\top\beta\)</span>, unknown even after fitting.</li>
+<li><strong>Fitted conditional mean:</strong> <span class="math inline">\(\widehat m(x)=x^\top\widehat\beta\)</span>, which changes from sample to sample.</li>
+<li><strong>New outcome:</strong> <span class="math inline">\(Y_0=m(X_0)+\varepsilon_0\)</span>. Knowing <span class="math inline">\(m(X_0)\)</span> would not tell us the exact price of a future vintage.</li>
+</ul>
+<p>For prediction the actual error is <span class="math inline">\(Y_0-\widehat m(X_0)=\varepsilon_0+X_0^\top(\beta-\widehat\beta)\)</span>. In particular, <span class="math inline">\(\widehat Y_0-X_0^\top\widehat\beta=0\)</span> <strong>by definition</strong>; it is <em>not</em> a prediction error.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="properties-of-the-ols-estimator" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Properties of the OLS estimator</h1>
+<section id="unbiasedness-and-variance-conditional-on-the-design" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="unbiasedness-and-variance-conditional-on-the-design"><span class="header-section-number">2.1</span> Unbiasedness and variance, conditional on the design</h2>
+<p>The central new question is <strong>what the probability model tells us about <span class="math inline">\(\widehat\beta\)</span></strong>. Substitute <span class="math inline">\(\mathbf Y=\mathbf X\beta+\boldsymbol\varepsilon\)</span> into the OLS formula:</p>
+<p><span class="math display">\[
+\boxed{\widehat\beta-\beta
+=(\mathbf X^\top\mathbf X)^{-1}\mathbf X^\top\boldsymbol\varepsilon.}
+\]</span></p>
+<p>If <span class="math inline">\(\mathbb E[\boldsymbol\varepsilon\mid\mathbf X]=0\)</span>, then</p>
+<p><span class="math display">\[
+\boxed{\mathbb E[\widehat\beta\mid\mathbf X]=\beta.}
+\]</span></p>
+<p>This is <strong>conditional unbiasedness</strong>: if we could repeatedly observe new outcomes at the same predictor values, the average coefficient estimate would equal the population coefficient. A <em>particular</em> estimate need not equal <span class="math inline">\(\beta\)</span>.</p>
+<p>If the errors also have constant conditional variance and are conditionally uncorrelated, so that <span class="math inline">\(\operatorname{Var}(\boldsymbol\varepsilon\mid\mathbf X)=\sigma^2I_n\)</span>, then</p>
+<p><span class="math display">\[
+\boxed{\operatorname{Var}(\widehat\beta\mid\mathbf X)
+=\sigma^2(\mathbf X^\top\mathbf X)^{-1}.}
+\]</span></p>
+<p>This is an exact <strong>finite-sample</strong> covariance formula. More variation in the observed predictors can make coefficients more precisely estimable, whereas nearly redundant predictors can make them imprecise.</p>
+<p>If, in addition, the entire error vector is conditionally normal,</p>
+<p><span class="math display">\[
+\boldsymbol\varepsilon\mid\mathbf X\sim N_n(0,\sigma^2I_n),
+\]</span></p>
+<p>then its linear transformation is exactly normal:</p>
+<p><span class="math display">\[
+\boxed{\widehat\beta\mid\mathbf X
+\sim N_{p+1}\!\left(\beta,\sigma^2(\mathbf X^\top\mathbf X)^{-1}\right).}
+\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled" title="Population Prediction MSE: A Glimpse into High Dimensions">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Population Prediction MSE: A Glimpse into High Dimensions
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>While the MSE is the best unbiased linear estimator, it is important, in particular, when we later will consider a larger number of possible covariates, to observe that it might not necessarily be optimal among all estimators. To understand that, consider the <strong>population prediction MSE</strong> for a new observation in the linear model decomposes into <span class="math display">\[
+\underbrace{\mathbb{E}[(Y_{\text{new}}-\hat Y_{\text{new}})^2]}_{\text{Prediction MSE}}
+=
+\underbrace{\sigma^2}_{\text{Irreducible noise}}
++
+\underbrace{\mathbb{E}[(X_{\text{new}}^T(\hat\beta-\beta))^2]}_{\text{Estimation uncertainty}}.
+\]</span></p>
+<p>Since the OLS estimator has covariance</p>
+<p><span class="math display">\[
+\operatorname{Var}(\hat\beta\mid X)=\sigma^2(X^TX)^{-1},
+\]</span></p>
+<p>we obtain, when new predictors are sampled uniformly from the observed design points,</p>
+<p><span class="math display">\[
+\boxed{
+\operatorname{MSE}_{\text{pop}}
+=
+\sigma^2\left(1+\frac{p+1}{n}\right)
+}
+\]</span></p>
+<p>where <span class="math inline">\(n\)</span> denotes the sample size and <span class="math inline">\(p\)</span> the number of predictors (excluding the intercept).</p>
+<p><strong>Why does this matter in high dimensions?</strong></p>
+<p>As the number of predictors <span class="math inline">\(p\)</span> increases relative to <span class="math inline">\(n\)</span>, the estimation uncertainty contributes increasingly to prediction error, even when the model is correctly specified.</p>
+<p>This foreshadows an important challenge of <strong>high-dimensional statistics</strong>: when <span class="math inline">\(p\)</span> becomes comparable to <span class="math inline">\(n\)</span>, the conditioning of <span class="math inline">\(X^TX\)</span> becomes crucial, and prediction error at genuinely unseen predictor values can increase dramatically. When <span class="math inline">\(p+1\geq n\)</span>, the usual full-rank OLS covariance formula no longer applies.</p>
+</div>
+</div>
+<p>Normal errors are <strong>not needed for unbiasedness or the variance formula</strong>. They give us an exact reference distribution for the classical small-sample tests and intervals.</p>
+</section>
+<section id="what-happens-without-normally-distributed-errors" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="what-happens-without-normally-distributed-errors"><span class="header-section-number">2.2</span> What happens without normally distributed errors?</h2>
+<p>With i.i.d. observation pairs, finite suitable moments, and a nonsingular population regressor second-moment matrix, we can use asymptotic theory. Let</p>
+<p><span class="math display">\[
+Q=\mathbb E[X_iX_i^\top],
+\qquad \frac{1}{n}\mathbf X^\top\mathbf X\xrightarrow{p}Q.
+\]</span></p>
+<p>Under the zero-conditional-mean and homoskedasticity assumptions, together with the regularity conditions for a central limit theorem,</p>
+<p><span class="math display">\[
+\boxed{\sqrt n(\widehat\beta-\beta)
+\xrightarrow{d}N_{p+1}(0,\sigma^2Q^{-1}).}
+\]</span></p>
+<p>Here <span class="math inline">\(X_i\)</span> is <strong>one</strong> <span class="math inline">\((p+1)\)</span>-dimensional predictor vector, while <span class="math inline">\(\mathbf X\)</span> is the <strong>full</strong> <span class="math inline">\(n\times(p+1)\)</span> design matrix. The limiting result is an unconditional statement for random predictors; the earlier formulas condition on the observed design.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Conditional CLT">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Conditional CLT
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A conditional version of the central limit theorem is also available. Under suitable regularity conditions on the design and the conditional error distribution, including a condition ensuring that no single observation dominates, the distribution of <span class="math inline">\(\sqrt n(\widehat\beta-\beta)\)</span> conditional on <span class="math inline">\(\mathbf X\)</span> also converges to <span class="math inline">\(N_{p+1}(0,\sigma^2Q^{-1})\)</span>, provided <span class="math inline">\(\mathbf X^\top\mathbf X/n\to Q\)</span> with <span class="math inline">\(Q\)</span> positive definite. For random designs, this convergence is understood in probability. Thus, even without normally distributed errors, the conditional distribution of the OLS estimator can be approximated in large samples by</p>
+<p><span class="math display">\[
+\widehat\beta\mid\mathbf X
+;\overset{\mathrm{approx.}}{\sim}
+N_{p+1}\left(\beta,\sigma^2(\mathbf X^\top\mathbf X)^{-1}\right).
+\]</span></p>
+<p>Unlike the exact finite-sample result under normal errors, this approximation relies on large-sample arguments.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Why do standard errors use $n-p-1$?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Why do standard errors use <span class="math inline">\(n-p-1\)</span>?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We do not know <span class="math inline">\(\sigma^2\)</span>. We estimate it from the residual sum of squares (RSS):</p>
+<p><span class="math display">\[
+\boxed{\widehat\sigma^2
+=\frac{\sum_{i=1}^n e_i^2}{n-p-1},
+\qquad
+\widehat{\operatorname{se}}(\widehat\beta_j)
+=\sqrt{\widehat\sigma^2\left[(\mathbf X^\top\mathbf X)^{-1}\right]_{jj}}.}
+\]</span></p>
+<p><strong>Why not divide by <span class="math inline">\(n\)</span>?</strong> We estimate <strong><span class="math inline">\(p+1\)</span> coefficients</strong> from the same <span class="math inline">\(n\)</span> observations: one intercept and <span class="math inline">\(p\)</span> slopes. Each fitted coefficient uses one independent direction of variation in the data. After fitting, the residual vector has only <span class="math inline">\(n-(p+1)\)</span> independent directions left. Under the model with <span class="math inline">\(\operatorname{Var}(\boldsymbol\varepsilon\mid\mathbf X)=\sigma^2I_n\)</span>,</p>
+<p><span class="math display">\[
+\mathbb E\!\left[\sum_{i=1}^n e_i^2\;\middle|\;\mathbf X\right]
+=(n-p-1)\sigma^2.
+\]</span></p>
+<p>Dividing by <span class="math inline">\(n-p-1\)</span>, rather than <span class="math inline">\(n\)</span>, therefore makes <span class="math inline">\(\widehat\sigma^2\)</span> <strong>conditionally unbiased</strong> for <span class="math inline">\(\sigma^2\)</span>. In Bordeaux we have <span class="math inline">\(n=27\)</span> and <span class="math inline">\(p=4\)</span>, so the denominator is <span class="math inline">\(27-5=22\)</span>. The coefficient <strong>standard error</strong> estimates how much <span class="math inline">\(\widehat\beta_j\)</span> would fluctuate between samples; it is not the standard deviation of individual wine prices.</p>
+</div>
+</div>
+</section>
+<section id="tests-confidence-intervals-and-p-values" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="tests-confidence-intervals-and-p-values"><span class="header-section-number">2.3</span> Tests, confidence intervals, and <span class="math inline">\(p\)</span>-values</h2>
+<p>To test whether one predictor contributes to the specified conditional mean <em>after adjusting for the others</em>, we can test <span class="math inline">\(H_0:\beta_j=0\)</span> against <span class="math inline">\(H_1:\beta_j\neq0\)</span> using</p>
+<p><span class="math display">\[
+\boxed{t_j=\frac{\widehat\beta_j-0}{\widehat{\operatorname{se}}(\widehat\beta_j)}.}
+\]</span></p>
+<p>With conditionally normal, homoskedastic, uncorrelated errors, this statistic has an <strong>exact Student <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n-p-1\)</span> degrees of freedom</strong> under <span class="math inline">\(H_0\)</span>. The two-sided <span class="math inline">\(p\)</span>-value is</p>
+<p><span class="math display">\[
+p_j=2\,\mathbb P\!\left(T_{n-p-1}\geq|t_j^{\mathrm{obs}}|\right),
+\]</span></p>
+<p>where <span class="math inline">\(T_{n-p-1}\)</span> denotes a random variable with that <span class="math inline">\(t\)</span> distribution. A <span class="math inline">\(p\)</span>-value is the probability <strong>under the null hypothesis and the test’s assumptions</strong> of observing a statistic at least as extreme as ours. It is <strong>not</strong> the probability that <span class="math inline">\(\beta_j=0\)</span>, and a value below 0.05 does not establish causality.</p>
+<p>The corresponding <strong>95% confidence interval</strong> for <span class="math inline">\(\beta_j\)</span> is</p>
+<p><span class="math display">\[
+\boxed{\widehat\beta_j\ \pm\ t_{n-p-1,\,0.975}\,
+\widehat{\operatorname{se}}(\widehat\beta_j).}
+\]</span></p>
+<p>It covers the fixed population coefficient in 95% of repeated samples <strong>if the model assumptions hold</strong>. The familiar “estimate <span class="math inline">\(\pm\)</span> two standard errors” is only a useful approximation, not the exact 95% interval for a sample with 22 residual degrees of freedom. Under more general errors, sufficiently large-sample normal approximations may justify approximate intervals, with the appropriate covariance estimator.</p>
+</section>
+<section id="the-fitted-bordeaux-regression" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="the-fitted-bordeaux-regression"><span class="header-section-number">2.4</span> The fitted Bordeaux regression</h2>
+<div id="fit-bordeaux-models" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>simple <span class="op">=</span> smf.ols(<span class="st">"Price ~ AGST"</span>, data<span class="op">=</span>wine).fit()</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>multiple <span class="op">=</span> smf.ols(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Price ~ AGST + WinterRain + HarvestRain + Age"</span>, data<span class="op">=</span>wine</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>).fit()</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>summary_table <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"estimate"</span>: multiple.params,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"standard error"</span>: multiple.bse,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"t statistic"</span>: multiple.tvalues,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"p value"</span>: multiple.pvalues,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"CI lower"</span>: multiple.conf_int()[<span class="dv">0</span>],</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"CI upper"</span>: multiple.conf_int()[<span class="dv">1</span>]</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(summary_table.to_string(float_format<span class="op">=</span><span class="kw">lambda</span> value: <span class="ss">f"</span><span class="sc">{</span>value<span class="sc">:.5g}</span><span class="ss">"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              estimate  standard error  t statistic    p value   CI lower   CI upper
+Intercept      -3.6516          1.6881      -2.1631   0.041665    -7.1524   -0.15069
+AGST           0.61639        0.095175       6.4764 1.6261e-06    0.41901    0.81377
+WinterRain   0.0011667      0.00048203       2.4204   0.024208 0.00016704  0.0021664
+HarvestRain -0.0038606      0.00080753      -4.7808 8.9704e-05 -0.0055353 -0.0021859
+Age           0.023848       0.0071667       3.3276  0.0030549  0.0089853   0.038711</code></pre>
+</div>
+</div>
+<p>These are <strong>estimates from real observations</strong>, not parameters known from a simulation. We can check our calculations against the published values: the temperature coefficient is about <span class="math inline">\(0.61639\)</span>, harvest-rain coefficient about <span class="math inline">\(-0.003861\)</span>.</p>
+<p>The temperature estimate means that a 1°C higher growing-season temperature at the <strong>same winter rainfall, harvest rainfall, and age</strong> is associated with <span class="math inline">\(0.616\)</span> higher <strong>expected log price</strong>. On the original price-index scale, <span class="math inline">\(\exp(0.616)\approx1.85\)</span> is the corresponding fitted <em>multiplicative</em> difference in geometric-mean price, not an increase of 0.616 currency units. Exponentiating expected log price does <strong>not</strong>, in general, give expected price in original units.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="What changes from simple to multiple regression?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>What changes from simple to multiple regression?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The target changes with the conditioning information:</p>
+<ul>
+<li><strong>Simple regression:</strong> the slope of <span class="math inline">\(\mathbb E[Y\mid \mathrm{AGST}]\)</span>, <em>if that conditional mean is linear</em>.</li>
+<li><strong>Multiple regression:</strong> the coefficient on <code>AGST</code> in <span class="math inline">\(\mathbb E[Y\mid \mathrm{AGST},\mathrm{WinterRain},\mathrm{HarvestRain},\mathrm{Age}]\)</span>, <em>if the additive model is correct</em>. It compares temperatures <strong>at fixed rainfall and age</strong>.</li>
+</ul>
+<div id="simple-vs-multiple" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.DataFrame({</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"model"</span>: [<span class="st">"Temperature only"</span>, <span class="st">"Adjusted for rain and age"</span>],</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AGST slope"</span>: [simple.params[<span class="st">"AGST"</span>], multiple.params[<span class="st">"AGST"</span>]],</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AGST standard error"</span>: [simple.bse[<span class="st">"AGST"</span>], multiple.bse[<span class="st">"AGST"</span>]]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>}).<span class="bu">round</span>(<span class="dv">4</span>).to_string(index<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    model  AGST slope  AGST standard error
+         Temperature only      0.6426               0.1434
+Adjusted for rain and age      0.6164               0.0952</code></pre>
+</div>
+</div>
+<p>The coefficients can differ without either comparison being causal. A change in coefficient is not, by itself, evidence of a particular causal mechanism or proof that one model is correct.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="measuring-and-testing-model-fit" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Measuring and Testing Model Fit</h1>
+<p>So far, we have studied estimation and inference for individual regression coefficients. We now turn to the fit of the regression model as a whole and to tests of whether several explanatory variables are jointly significant.</p>
+<section id="measures-of-model-fit" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="measures-of-model-fit"><span class="header-section-number">3.1</span> Measures of Model Fit</h2>
+<p>Consider the linear regression model</p>
+<p><span class="math display">\[
+Y=X\beta+\varepsilon,
+\]</span></p>
+<p>where <span class="math inline">\(X\)</span> is an <span class="math inline">\(n\times (p+1)\)</span> matrix containing an intercept and <span class="math inline">\(p\)</span> explanatory variables. OLS minimizes the <strong>residual sum of squares (RSS)</strong>,</p>
+<p><span class="math display">\[
+\mathrm{RSS}=\sum_{i=1}^n(y_i-\hat y_i)^2.
+\]</span></p>
+<p>To assess fit relative to an intercept-only model, define the <strong>total sum of squares (TSS)</strong> and the <strong>explained sum of squares (ESS)</strong>:</p>
+<p><span class="math display">\[
+\mathrm{TSS}=\sum_{i=1}^n(y_i-\bar y)^2,
+\qquad
+\mathrm{ESS}=\sum_{i=1}^n(\hat y_i-\bar y)^2.
+\]</span></p>
+<p>Since OLS residuals are orthogonal to the fitted values, and the model includes an intercept,</p>
+<p><span class="math display">\[
+\mathrm{TSS}=\mathrm{ESS}+\mathrm{RSS}.
+\]</span></p>
+<p>This gives the <strong>coefficient of determination</strong>:</p>
+<p><span class="math display">\[
+\boxed{
+R^2=\frac{\mathrm{ESS}}{\mathrm{TSS}}
+=1-\frac{\mathrm{RSS}}{\mathrm{TSS}}.
+}
+\]</span></p>
+<p>Thus, <span class="math inline">\(R^2\)</span> measures the proportion of observed sample variation explained by the regression relative to the intercept-only model.</p>
+<p>Because OLS minimizes RSS, adding regressors can never decrease <span class="math inline">\(R^2\)</span>. To account for the number of estimated parameters, we define <strong>adjusted <span class="math inline">\(R^2\)</span></strong>:</p>
+<p><span class="math display">\[
+\boxed{
+\bar R^2
+=
+1-\frac{\mathrm{RSS}/(n-p-1)}{\mathrm{TSS}/(n-1)}
+=
+1-(1-R^2)\frac{n-1}{n-p-1}.
+}
+\]</span></p>
+<p>Unlike <span class="math inline">\(R^2\)</span>, adjusted <span class="math inline">\(R^2\)</span> can decrease when additional regressors provide only a small improvement in fit.</p>
+<p>Finally, the <strong>residual standard error</strong> is</p>
+<p><span class="math display">\[
+\boxed{
+\hat\sigma=\sqrt{\frac{\mathrm{RSS}}{n-p-1}}.
+}
+\]</span></p>
+<p>Recall that under the classical linear model assumptions,</p>
+<p><span class="math display">\[
+\mathbb{E}[\mathrm{RSS}\mid X]=(n-p-1)\sigma^2,
+\]</span></p>
+<p>so <span class="math inline">\(\hat\sigma^2\)</span> is an unbiased estimator of the error variance <span class="math inline">\(\sigma^2\)</span>.</p>
+</section>
+<section id="testing-model-fit-the-partial-f-test" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="testing-model-fit-the-partial-f-test"><span class="header-section-number">3.2</span> Testing Model Fit: The Partial <span class="math inline">\(F\)</span>-Test</h2>
+<p>Measures such as <span class="math inline">\(R^2\)</span> describe in-sample fit, but they do not tell us whether the improvement from adding regressors is statistically significant.</p>
+<p>Suppose we want to test <span class="math inline">\(q\)</span> independent linear restrictions on the regression coefficients:</p>
+<p><span class="math display">\[
+H_0:R\beta=r,
+\]</span></p>
+<p>where <span class="math inline">\(R\)</span> is a <span class="math inline">\(q\times(p+1)\)</span> matrix of rank <span class="math inline">\(q\)</span>.</p>
+<p>We estimate two nested models:</p>
+<ul>
+<li>The <strong>unrestricted model (U)</strong> estimates all <span class="math inline">\(p+1\)</span> coefficients.</li>
+<li>The <strong>restricted model (R)</strong> imposes the <span class="math inline">\(q\)</span> restrictions under <span class="math inline">\(H_0\)</span>.</li>
+</ul>
+<p>Let <span class="math inline">\(\mathrm{RSS}_U\)</span> and <span class="math inline">\(\mathrm{RSS}_R\)</span> denote their respective residual sums of squares. Since the unrestricted model minimizes RSS over a larger parameter space,</p>
+<p><span class="math display">\[
+\mathrm{RSS}_U\leq \mathrm{RSS}_R.
+\]</span></p>
+<p>The reduction <span class="math inline">\(\mathrm{RSS}_R-\mathrm{RSS}_U\)</span> measures the improvement in fit from relaxing the restrictions. Under the null hypothesis, any such improvement should arise from sampling variation alone.</p>
+<p>We compare the improvement per restriction with the estimated error variance in the unrestricted model:</p>
+<p><span class="math display">\[
+\boxed{
+F=
+\frac{(\mathrm{RSS}_R-\mathrm{RSS}_U)/q}
+{\mathrm{RSS}_U/(n-p-1)}.
+}
+\]</span></p>
+<p>A large value of <span class="math inline">\(F\)</span> provides evidence against <span class="math inline">\(H_0\)</span>.</p>
+<section id="finite-sample-distribution" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="finite-sample-distribution"><span class="header-section-number">3.2.1</span> Finite-Sample Distribution</h3>
+<p>Assume that <span class="math inline">\(X\)</span> has full column rank, <span class="math inline">\(n&gt;p+1\)</span>, and, conditional on <span class="math inline">\(X\)</span>,</p>
+<p><span class="math display">\[
+\varepsilon\mid X\sim N(0,\sigma^2I_n).
+\]</span></p>
+<p>Under <span class="math inline">\(H_0\)</span>, the Gaussian linear model implies</p>
+<p><span class="math display">\[
+\frac{\mathrm{RSS}_R-\mathrm{RSS}_U}{\sigma^2}
+\sim\chi_q^2,
+\qquad
+\frac{\mathrm{RSS}_U}{\sigma^2}
+\sim\chi_{n-p-1}^2.
+\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled" title="Intuition: The Chi-Squared and F Distributions">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Intuition: The Chi-Squared and F Distributions
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <strong>chi-squared distribution</strong> describes the sum of squared independent standard normal random variables. If</p>
+<p><span class="math display">\[
+Z_1,\ldots,Z_k \overset{iid}{\sim} N(0,1),
+\]</span></p>
+<p>then</p>
+<p><span class="math display">\[
+\boxed{
+Z_1^2+\cdots+Z_k^2\sim\chi_k^2.
+}
+\]</span></p>
+<p>The parameter <span class="math inline">\(k\)</span> is called the <strong>degrees of freedom</strong>. It counts the number of independent squared normal components being added. Since we square these variables, a chi-squared random variable is always nonnegative, with</p>
+<p><span class="math display">\[
+\mathbb{E}[\chi_k^2]=k.
+\]</span></p>
+<p>Intuitively, a chi-squared distribution measures the <em>total squared magnitude of random noise</em>. In regression, sums of squared residuals, after appropriate scaling, have precisely this structure under normally distributed errors.</p>
+<p>The <strong>F-distribution</strong> arises when we compare two independent chi-squared random variables, each divided by its degrees of freedom. If</p>
+<p><span class="math display">\[
+U\sim\chi_q^2,\qquad
+V\sim\chi_m^2,
+\qquad U\perp V,
+\]</span></p>
+<p>then</p>
+<p><span class="math display">\[
+\boxed{
+\frac{U/q}{V/m}\sim F_{q,m}.
+}
+\]</span></p>
+<p>Since <span class="math inline">\(U/q\)</span> and <span class="math inline">\(V/m\)</span> both have expectation one, the F-distribution describes the ratio of two independently estimated noise quantities. Values substantially larger than one indicate that the numerator is unusually large relative to the denominator.</p>
+<p><strong>Connection to regression.</strong> Under the null hypothesis and the classical Gaussian assumptions, the reduction in RSS from relaxing <span class="math inline">\(q\)</span> restrictions and the unrestricted RSS satisfy</p>
+<p><span class="math display">\[
+\underbrace{\frac{\mathrm{RSS}_R-\mathrm{RSS}_U}{\sigma^2}}_{\chi_q^2}
+\quad\text{and}\quad
+\underbrace{\frac{\mathrm{RSS}_U}{\sigma^2}}_{\chi_{n-p-1}^2}.
+\]</span></p>
+<p>These quantities are independent. Dividing each by its degrees of freedom and taking their ratio therefore produces the F-statistic:</p>
+<p><span class="math display">\[
+F=
+\frac{(\mathrm{RSS}_R-\mathrm{RSS}_U)/q}
+{\mathrm{RSS}_U/(n-p-1)}
+\sim F_{q,n-p-1}.
+\]</span></p>
+<p>A large observed F-statistic means that imposing the restrictions worsens model fit by more than we would typically expect from random noise alone.</p>
+</div>
+</div>
+<p>The two quantities are independent. Consequently,</p>
+<p><span class="math display">\[
+\boxed{
+F\mid X\sim F_{q,n-p-1}
+\qquad\text{under }H_0.
+}
+\]</span></p>
+<p>This distribution is <strong>exact in finite samples</strong>. At significance level <span class="math inline">\(\alpha\)</span>, we reject <span class="math inline">\(H_0\)</span> if</p>
+<p><span class="math display">\[
+F&gt;F_{q,n-p-1;\,1-\alpha}.
+\]</span></p>
+</section>
+<section id="asymptotic-distribution" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="asymptotic-distribution"><span class="header-section-number">3.2.2</span> Asymptotic Distribution</h3>
+<p>Normality is sufficient for the exact result, but not necessary for asymptotic inference.</p>
+<p>Suppose the conditional mean is correctly specified, errors are exogenous and homoskedastic, and suitable moment and design regularity conditions hold. For fixed <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span>, as <span class="math inline">\(n\to\infty\)</span>,</p>
+<p><span class="math display">\[
+\frac{\mathrm{RSS}_U}{n-p-1}
+\xrightarrow{p}\sigma^2.
+\]</span></p>
+<p>Furthermore, under <span class="math inline">\(H_0\)</span>, the numerator divided by <span class="math inline">\(\sigma^2\)</span> converges in distribution to <span class="math inline">\(\chi_q^2\)</span>. By Slutsky’s theorem,</p>
+<p><span class="math display">\[
+\boxed{
+qF\xrightarrow{d}\chi_q^2.
+}
+\]</span></p>
+<p>Equivalently, <span class="math inline">\(F\xrightarrow{d}\chi_q^2/q\)</span>.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="The Wald Test: An Equivalent Approach in the Classical Linear Model">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>The Wald Test: An Equivalent Approach in the Classical Linear Model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>So far, we have constructed the partial <span class="math inline">\(F\)</span>-test by comparing the residual sums of squares of restricted and unrestricted models. Alternatively, we can test the restrictions directly using the estimated coefficients and their covariance matrix.</p>
+<p><strong>In our classical homoskedastic linear regression setting, these two approaches are mathematically equivalent.</strong> They test the same hypothesis and yield identical p-values when evaluated using their corresponding finite-sample distributions. The Wald formulation is nevertheless useful because it can be generalized to settings beyond the classical linear model.</p>
+<p>Recall that</p>
+<p><span class="math display">\[
+\widehat{\operatorname{Var}}(\hat\beta)
+=
+\hat\sigma^2(X^TX)^{-1},
+\qquad
+\hat\sigma^2=\frac{\mathrm{RSS}_U}{n-p-1}.
+\]</span></p>
+<p>For the joint hypothesis <span class="math inline">\(H_0:R\beta=r\)</span>, the <strong>Wald statistic</strong> is</p>
+<p><span class="math display">\[
+\boxed{
+W=
+(R\hat\beta-r)^T
+\left[
+R\widehat{\operatorname{Var}}(\hat\beta)R^T
+\right]^{-1}
+(R\hat\beta-r).
+}
+\]</span></p>
+<p>It measures the squared distance of the estimated coefficients from the restrictions imposed by the null hypothesis, accounting for their estimation uncertainty and covariance.</p>
+<p>For linear restrictions in classical homoskedastic OLS, we have the exact identity</p>
+<p><span class="math display">\[
+\boxed{W=qF,}
+\]</span></p>
+<p>where <span class="math inline">\(q\)</span> denotes the number of restrictions. Consequently, under Gaussian errors,</p>
+<p><span class="math display">\[
+\frac{W}{q}\sim F_{q,n-p-1}
+\]</span></p>
+<p>holds exactly, while under suitable regularity conditions with fixed <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span>,</p>
+<p><span class="math display">\[
+W\xrightarrow{d}\chi_q^2.
+\]</span></p>
+<p>Thus, <strong>in our present setting, choosing between the partial <span class="math inline">\(F\)</span>-test and the Wald test is a matter of formulation, not statistical validity or power</strong>. The partial <span class="math inline">\(F\)</span>-test emphasizes the loss of model fit from imposing restrictions, whereas the Wald test emphasizes the distance of estimated coefficients from their hypothesized values.</p>
+<p>The advantage of the Wald formulation becomes apparent in more general settings, such as heteroskedastic regression or nonlinear restrictions, which we will consider later.</p>
+</div>
+</div>
+</section>
+<section id="the-overall-f-test" class="level3" data-number="3.2.3">
+<h3 data-number="3.2.3" class="anchored" data-anchor-id="the-overall-f-test"><span class="header-section-number">3.2.3</span> The Overall <span class="math inline">\(F\)</span>-Test</h3>
+<p>A special case is the test that all slope coefficients are jointly zero:</p>
+<p><span class="math display">\[
+H_0:\beta_1=\cdots=\beta_p=0.
+\]</span></p>
+<p>The restricted model contains only an intercept, so <span class="math inline">\(\mathrm{RSS}_R=\mathrm{TSS}\)</span> and <span class="math inline">\(q=p\)</span>. Hence,</p>
+<p><span class="math display">\[
+F_{\mathrm{overall}}
+=
+\frac{(\mathrm{TSS}-\mathrm{RSS})/p}
+{\mathrm{RSS}/(n-p-1)}.
+\]</span></p>
+<p>Using the definition of <span class="math inline">\(R^2\)</span>,</p>
+<p><span class="math display">\[
+\boxed{
+F_{\mathrm{overall}}
+=
+\frac{R^2/p}{(1-R^2)/(n-p-1)}.
+}
+\]</span></p>
+<p>Under the classical Gaussian assumptions and <span class="math inline">\(H_0\)</span>,</p>
+<p><span class="math display">\[
+F_{\mathrm{overall}}\sim F_{p,n-p-1}.
+\]</span></p>
+<p>This is the overall <span class="math inline">\(F\)</span>-test reported by <code>statsmodels</code> in the standard OLS regression summary.</p>
+</section>
+</section>
+<section id="application-explaining-wine-prices" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="application-explaining-wine-prices"><span class="header-section-number">3.3</span> Application: Explaining Wine Prices</h2>
+<p>We return to our sample of 27 wine vintages. We compare two specifications for log wine prices: a simple regression on temperature and a multiple regression including temperature, winter rainfall, harvest rainfall, and wine age.</p>
+<p>First, we compare their in-sample measures of fit:</p>
+<div id="model-fit-summary" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.DataFrame({</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"model"</span>: [<span class="st">"Temperature only"</span>, <span class="st">"Weather plus age"</span>],</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"R-squared"</span>: [simple.rsquared, multiple.rsquared],</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"adjusted R-squared"</span>: [</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        simple.rsquared_adj, multiple.rsquared_adj</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"residual standard error (log price)"</span>: [</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        np.sqrt(simple.mse_resid),</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        np.sqrt(multiple.mse_resid)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>}).<span class="bu">round</span>(<span class="dv">4</span>).to_string(index<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           model  R-squared  adjusted R-squared  residual standard error (log price)
+Temperature only     0.4456              0.4234                               0.4819
+Weather plus age     0.8275              0.7962                               0.2865</code></pre>
+</div>
+</div>
+<p>The four-predictor model has <span class="math inline">\(R^2\approx0.828\)</span> and <span class="math inline">\(\hat\sigma\approx0.2865\)</span>. It therefore explains approximately 82.8% of the observed variation in log wine prices relative to the intercept-only benchmark.</p>
+<p>We now ask whether <strong>winter rainfall and harvest rainfall are jointly significant</strong>, conditional on temperature and age:</p>
+<p><span class="math display">\[
+H_0:\beta_W=\beta_H=0.
+\]</span></p>
+<p>The unrestricted model contains four predictors and an intercept, so <span class="math inline">\(p=4\)</span>. There are <span class="math inline">\(q=2\)</span> restrictions and <span class="math inline">\(n=27\)</span> observations. Under the classical Gaussian assumptions,</p>
+<p><span class="math display">\[
+\boxed{F\sim F_{2,22}\quad\text{under }H_0.}
+\]</span></p>
+<p>The test can be carried out directly:</p>
+<div id="joint-regression-test" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(multiple.f_test(<span class="st">"WinterRain = 0, HarvestRain = 0"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;F test: F=19.507633719096397, p=1.3391393692789272e-05, df_denom=22, df_num=2&gt;</code></pre>
+</div>
+</div>
+<p>The output provides the <span class="math inline">\(F\)</span>-statistic and its p-value. We reject the null hypothesis at the 5% significance level if the p-value is below <span class="math inline">\(0.05\)</span>, concluding that at least one rainfall coefficient differs from zero conditional on the other regressors.</p>
+<p>To compare this with the overall regression test, we can also extract the corresponding statistic from <code>statsmodels</code>:</p>
+<div id="overall-regression-test" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Overall F-statistic: </span><span class="sc">{</span>multiple<span class="sc">.</span>fvalue<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Overall F-test p-value: </span><span class="sc">{</span>multiple<span class="sc">.</span>f_pvalue<span class="sc">:.4g}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Overall F-statistic: 26.3899
+Overall F-test p-value: 4.057e-08</code></pre>
+</div>
+</div>
+<p>The overall test evaluates whether all four slope coefficients are jointly zero, whereas the partial test examines only the two rainfall coefficients while retaining temperature and age in the model.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Exercise: Model Fit and Statistical Significance">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Exercise: Model Fit and Statistical Significance
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Two analysts fit regressions using the same wine vintages. Model A has a larger <span class="math inline">\(R^2\)</span> than model B, but model B estimates the temperature coefficient more precisely.</p>
+<ol type="1">
+<li>Is this a contradiction?</li>
+<li>Does a larger <span class="math inline">\(R^2\)</span> imply that all coefficients are statistically significant?</li>
+<li>Does rejection of the overall <span class="math inline">\(F\)</span>-test imply that every individual coefficient is significant?</li>
+<li>Is either model necessarily better at predicting the price of a future vintage?</li>
+</ol>
+</div>
+</div>
+<p>Finally, neither a high <span class="math inline">\(R^2\)</span> nor rejection of an <span class="math inline">\(F\)</span>-test guarantees good out-of-sample prediction. These results concern in-sample fit and hypotheses about the conditional mean. Predictive performance additionally depends on estimation uncertainty and on the distribution of future observations.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Multiple Testing: When Significance Becomes Misleading">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Multiple Testing: When Significance Becomes Misleading
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The significance level <span class="math inline">\(\alpha\)</span> controls the probability of a Type I error for a <strong>single hypothesis test</strong>. However, when we test many hypotheses, the probability of obtaining at least one false rejection increases.</p>
+<p>For example, suppose we conduct <span class="math inline">\(m\)</span> independent hypothesis tests, all under true null hypotheses, each at significance level <span class="math inline">\(\alpha=0.05\)</span>. The probability of at least one false rejection is</p>
+<p><span class="math display">\[
+\boxed{
+P(\text{at least one false rejection})
+=1-(1-\alpha)^m.
+}
+\]</span></p>
+<p>With <span class="math inline">\(m=20\)</span> tests, this probability is approximately <span class="math inline">\(64\%\)</span>, even though none of the tested effects exists.</p>
+<p>This matters when examining many regression coefficients, trying different model specifications, or repeatedly testing combinations of predictors and reporting only significant results.</p>
+<p><strong>How can we address this?</strong></p>
+<ul>
+<li><strong>Joint F-tests</strong> allow us to test a prespecified group of coefficients simultaneously, controlling the significance level for that joint null hypothesis. They do not, however, correct for testing many different groups.</li>
+<li><strong>Bonferroni correction:</strong> When conducting <span class="math inline">\(m\)</span> tests, reject an individual null hypothesis only if its p-value is below <span class="math inline">\(\alpha/m\)</span>. This controls the probability of at least one false rejection without requiring independence.</li>
+<li><strong>Pre-specifying hypotheses:</strong> Choosing which hypotheses to test before examining the results reduces the risk of selectively reporting significant findings.</li>
+</ul>
+<p>The key distinction is that <strong>a 5% significance level applies to an individual test, not automatically to an entire collection of tests</strong>.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Looking Ahead: From Model Fit to Model Selection">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Looking Ahead: From Model Fit to Model Selection
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>So far, we have treated the set of explanatory variables as given. But in practice, an important question is <strong>which variables should enter the regression model in the first place?</strong></p>
+<p>Including additional regressors can only decrease RSS and increase <span class="math inline">\(R^2\)</span>. However, as we have seen, estimating more coefficients also increases estimation uncertainty and may worsen out-of-sample prediction.</p>
+<p>This creates a fundamental trade-off between <strong>model fit and model complexity</strong>.</p>
+<p>Several approaches address this problem:</p>
+<ul>
+<li><strong>Forward and backward selection</strong> sequentially add or remove regressors according to statistical criteria, such as partial <span class="math inline">\(F\)</span>-tests, or measures of model fit.</li>
+<li><strong>Information criteria</strong>, such as AIC and BIC, balance model fit against a penalty for the number of estimated parameters.</li>
+<li><strong>Regularization methods</strong>, such as the LASSO, directly penalize the magnitude of regression coefficients and can set some coefficients exactly to zero.</li>
+</ul>
+<p>For example, while OLS minimizes</p>
+<p><span class="math display">\[
+\mathrm{RSS}(\beta)=\sum_{i=1}^n(y_i-x_i^T\beta)^2,
+\]</span></p>
+<p>the LASSO solves</p>
+<p><span class="math display">\[
+\boxed{
+\hat\beta_{\mathrm{LASSO}}
+=
+\arg\min_{\beta}
+\left\{
+\sum_{i=1}^n(y_i-x_i^T\beta)^2
++\lambda\sum_{j=1}^p|\beta_j|
+\right\},
+}
+\]</span></p>
+<p>where the intercept is not penalized and <span class="math inline">\(\lambda\geq 0\)</span> controls the strength of regularization.</p>
+<p>We will study these approaches in a later chapter on <strong>model selection</strong>, where we examine how to choose explanatory variables while accounting for model complexity and predictive performance.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="predicting-the-mean-and-predicting-a-new-observation" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Predicting the mean and predicting a new observation</h1>
+<!--
+Consider a **hypothetical vintage** with growing-season temperature 16.5°C, winter rainfall 600 mm, harvest rainfall 140 mm, and age 12 years—values within the observed ranges. We must distinguish two questions:
+
+1. What is the **average log price** for vintages with these characteristics? The target is $m(x_0)$.
+2. What might be **one such vintage's realized log price**? The target is the random outcome $Y_0=m(x_0)+\varepsilon_0$.
+
+Both use $\widehat m(x_0)=x_{0*}^\top\widehat\beta$ as point prediction, but their uncertainty differs. Under the classical model and treating $x_0$ as fixed,
+
+$$
+\begin{aligned}
+\widehat{\operatorname{Var}}(\widehat m(x_0)\mid\mathbf X)
+&=\widehat\sigma^2 x_{0*}^\top(\mathbf X^\top\mathbf X)^{-1}x_{0*},\\
+\widehat{\operatorname{Var}}(Y_0-\widehat m(x_0)\mid\mathbf X)
+&=\widehat\sigma^2\left[1+x_{0*}^\top(\mathbf X^\top\mathbf X)^{-1}x_{0*}\right].
+\end{aligned}
+$$
+
+The extra **1** represents the remaining variance in an individual vintage's outcome. Under those assumptions a prediction interval is wider than a confidence interval for the conditional mean.
+
+::: {#predictions-ch3 .cell execution_count=8}
+``` {.python .cell-code}
+new_vintage = pd.DataFrame({
+    "AGST": [16.5], "WinterRain": [600],
+    "HarvestRain": [140], "Age": [12]
+})
+print(multiple.get_prediction(new_vintage).summary_frame(alpha=0.05).round(3).to_string(index=False))
+```
+
+::: {.cell-output .cell-output-stdout}
+```
+ mean  mean_se  mean_ci_lower  mean_ci_upper  obs_ci_lower  obs_ci_upper
+6.965    0.063          6.834          7.095         6.356         7.573
+```
+:::
+:::
+
+
+The columns `mean_ci_lower` and `mean_ci_upper` refer to uncertainty about **mean log price**; `obs_ci_lower` and `obs_ci_upper` refer to a **single new log price**. Exponentiating endpoints converts a log-price interval to the original price-index scale, but exponentiating the fitted conditional mean of log price does **not**, in general, give the conditional arithmetic mean price. These model-based intervals also exclude uncertainty about future changes in the wine market and about whether the vintage-to-vintage observations are independent.
+
+## Where does the bias–variance trade-off enter?
+
+For a **new independent** response $Y_0$ at $x_0$, and a prediction rule $\widehat m(x_0)$ learned from random training data, Chapter 2's estimator bias–variance identity combines with Chapter 1's conditional-mean decomposition:
+
+$$
+\boxed{
+\mathbb E_{\mathrm{train},Y_0}\!\left[(Y_0-\widehat m(x_0))^2\mid X_0=x_0\right]
+=\operatorname{Var}(Y_0\mid X_0=x_0)
++\operatorname{Bias}(\widehat m(x_0))^2
++\operatorname{Var}(\widehat m(x_0)).
+}
+$$
+
+Here the last two expectations/variances refer to repeated **training samples** and the bias is relative to the true $m(x_0)$. This identity requires an independent test response; it does not describe error evaluated on the same observations used to fit the model.
+
+A more flexible fitted function might reduce approximation bias but raise estimation variance. For this reason a smaller **training** RSS does not establish a smaller **test** error. We return to evaluating this trade-off quantitatively in the next chapter, rather than repeating all of ISLP Chapter 2 here.
+
+-->
+</section>
+<section id="troubleshooting-and-diagnostics" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Troubleshooting and Diagnostics</h1>
+<!--
+## All the main predictors are quantitative
+
+The four principal predictors are temperature, two rainfall measurements, and vintage age. The conditional coefficient of growing-season temperature is interpreted **at fixed rainfall and age**. This is a property of the proposed conditional mean, not a literal experiment in which a winemaker changes the weather.
+
+ISLP also covers categorical predictors: for a binary group indicator $G$, including $\beta_G G$ would shift the conditional mean by $\beta_G$ between groups at the same quantitative predictor values. This dataset contains **no independently recorded categorical factor suitable for that demonstration**, so we do not invent a grape variety, region, or winery label. The general indicator-variable principle needs no second dataset here.
+
+-->
+<section id="interactions" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="interactions"><span class="header-section-number">5.1</span> Interactions</h2>
+<!--
+Suppose we want to allow the relationship with temperature to differ depending on harvest rainfall. Consider
+
+$$
+\mathbb E[Y\mid T,W,H,A]
+=\beta_0+\beta_TT+\beta_WW+\beta_HH+\beta_AA+\beta_{TH}(T\cdot H).
+$$
+
+In this model,
+
+$$
+\frac{\partial m(t,w,h,a)}{\partial t}=\beta_T+\beta_{TH}h.
+$$
+
+The coefficient of temperature alone is its slope at **zero harvest rainfall**, not at a typical vintage. We could instead center harvest rainfall to interpret the temperature slope at an observed, representative rainfall level.
+
+::: {#interaction-example .cell execution_count=9}
+``` {.python .cell-code}
+wine["HarvestRain_centered"] = wine["HarvestRain"] - wine["HarvestRain"].mean()
+interaction_fit = smf.ols(
+    "Price ~ AGST * HarvestRain_centered + WinterRain + Age", data=wine
+).fit()
+print(interaction_fit.params.round(5).to_string())
+```
+
+::: {.cell-output .cell-output-stdout}
+```
+Intercept                   -4.32661
+AGST                         0.62468
+HarvestRain_centered         0.00288
+AGST:HarvestRain_centered   -0.00041
+WinterRain                   0.00116
+Age                          0.02289
+```
+:::
+:::
+
+
+The original published benchmark is the **additive** four-predictor model. This interaction is our exploratory extension, not a claim that the original authors estimated it or that it is physically correct. With $n=27$, exploratory specifications and conventional significance tests require particular care.
+
+-->
+</section>
+<section id="nonlinear-conditional-means" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="nonlinear-conditional-means"><span class="header-section-number">5.2</span> Nonlinear conditional means</h2>
+<!--
+A quadratic response to growing-season temperature might be more plausible than assuming the same marginal association at all temperatures:
+
+$$
+\mathbb E[Y\mid T,W,H,A]
+=\beta_0+\beta_TT+\beta_{T^2}T^2+\beta_WW+\beta_HH+\beta_AA.
+$$
+
+This mean is nonlinear in $T$ but **linear in the coefficients**. OLS and the same matrix algebra continue to apply if the statistical assumptions are appropriate. It is good practice to center $T$ before squaring it, especially when the observed range is narrow.
+
+::: {#quadratic-example .cell execution_count=10}
+``` {.python .cell-code}
+wine["AGST_centered"] = wine["AGST"] - wine["AGST"].mean()
+quadratic_fit = smf.ols(
+    "Price ~ AGST_centered + I(AGST_centered**2) + WinterRain + HarvestRain + Age",
+    data=wine
+).fit()
+print(quadratic_fit.params[["AGST_centered", "I(AGST_centered ** 2)"]].round(5).to_string())
+```
+
+::: {.cell-output .cell-output-stdout}
+```
+AGST_centered            0.66827
+I(AGST_centered ** 2)    0.23861
+```
+:::
+:::
+
+
+These extensions illustrate **choices of conditional-mean specification**; a better training fit alone does not validate the new terms. Neither should be extrapolated to climates far outside the data's observed temperature range.
+
+# What can go wrong? Reading diagnostic evidence
+
+A regression table is not a certificate that its statistical assumptions hold. Diagnostics examine implications of a specified model; they cannot prove the model is correct.
+
+## Nonlinearity and omitted structure
+
+If the conditional mean is correctly specified, $\mathbb E[\varepsilon\mid X]=0$. A curve or pattern in residuals versus temperature, rainfall, age, or fitted values may suggest an omitted nonlinear term or interaction. Sample residuals are orthogonal to included design columns **by construction**, so zero sample correlation with temperature is not evidence that the conditional-mean model is correct.
+
+## Unequal conditional variances
+
+Even if $\mathbb E[\varepsilon\mid X]=0$, the remaining variability in vintage prices may depend on the weather or age:
+
+$$
+\operatorname{Var}(\varepsilon\mid X=x)=\sigma^2(x).
+$$
+
+Then OLS can still be conditionally unbiased, but its conventional covariance estimate $\widehat\sigma^2(\mathbf X^\top\mathbf X)^{-1}$ is generally invalid. Heteroskedasticity-consistent (robust) standard errors are a *large-sample* alternative under appropriate independence and moment assumptions. With **27 vintages**, they are not a guarantee of valid inference.
+
+::: {#compare-standard-errors .cell execution_count=11}
+``` {.python .cell-code}
+robust = multiple.get_robustcov_results(cov_type="HC3")
+print(pd.DataFrame({
+    "coefficient": multiple.params.index,
+    "conventional SE": multiple.bse.to_numpy(),
+    "HC3 SE": robust.bse
+}).round(5).to_string(index=False))
+```
+
+::: {.cell-output .cell-output-stdout}
+```
+coefficient  conventional SE  HC3 SE
+  Intercept          1.68809 2.13690
+       AGST          0.09517 0.12427
+ WinterRain          0.00048 0.00057
+HarvestRain          0.00081 0.00087
+        Age          0.00717 0.00711
+```
+:::
+:::
+
+
+We cannot know whether the assumptions hold just by comparing standard-error estimates in one sample.
+-->
+</section>
+<section id="outliers-leverage-and-influential-vintages" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="outliers-leverage-and-influential-vintages"><span class="header-section-number">5.3</span> Outliers, leverage, and influential vintages</h2>
+<!--
+A large residual means the vintage's log price differs considerably from the model prediction. **Leverage** measures how unusual a vintage's predictors are relative to the sample; **influence** asks how substantially an observation changes the estimated fit. High leverage need not imply a large residual. Cook's distance is a useful *screening statistic*, not a mechanical deletion rule.
+
+-->
+</section>
+<section id="collinearity-and-identifiability" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="collinearity-and-identifiability"><span class="header-section-number">5.4</span> Collinearity and identifiability</h2>
+<!--
+
+Nearly collinear predictors can make individual coefficient estimates unstable even if fitted predictions remain comparatively stable. The dataset also contains `FrancePop`, which largely tracks historical time, whereas `Age` in this extract decreases as the harvest year increases. Including both may therefore add severe collinearity without adding meaningful information about wine prices. Including `Year` and `Age` together gives **exact** collinearity here because `Age = 1983 - Year`. We keep the published model **without** `FrancePop` as our main specification.
+
+-->
+</section>
+<section id="dependence" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="dependence"><span class="header-section-number">5.5</span> Dependence</h2>
+<!--
+Our vintages are successive years, **not independent random draws that a researcher deliberately sampled**. Unobserved market trends or persistent weather patterns may induce dependence. In that case, even robust standard errors intended for independent observations may be misleading. Predictions for climates or wine-market regimes outside the historical sample are extrapolations, and model-based intervals cannot capture all such risks.
+
+::: {#cell-diagnostics-ch3 .cell execution_count=12}
+``` {.python .cell-code}
+influence = multiple.get_influence()
+standardized = influence.resid_studentized_internal
+leverage = influence.hat_matrix_diag
+fig, axes = plt.subplots(1, 2, figsize=(11, 4))
+axes[0].scatter(multiple.fittedvalues, multiple.resid, alpha=0.75, s=28)
+axes[0].axhline(0, color="black", lw=1, ls="--")
+axes[0].set(xlabel="Fitted log price", ylabel="Residual (log price)",
+            title="Mean / variance patterns")
+axes[1].scatter(leverage, standardized, alpha=0.75, s=28)
+axes[1].axhline(0, color="black", lw=1, ls="--")
+axes[1].set(xlabel="Leverage", ylabel="Standardized residual",
+            title="Unusual vintages")
+plt.tight_layout()
+plt.show()
+```
+
+::: {.cell-output .cell-output-display}
+![Diagnostic plots from the Bordeaux wine regression: residuals versus fitted log price, and standardized residuals versus leverage.](CH3_files/figure-html/diagnostics-ch3-output-1.png){#diagnostics-ch3 width=1045 height=372}
+:::
+:::
+
+
+::: {.callout-warning title="What diagnostics cannot establish"}
+No residual plot can verify independent sampling across years, rule out omitted market conditions, or establish that a temperature coefficient is a causal effect. Sound-looking diagnostics do not eliminate scientific uncertainty about the model.
+:::
+
+-->
+<!--
+# From the model to a wine-pricing decision
+
+The historical Bordeaux research asked whether weather measurements could inform valuations of wine before the full market value of a vintage was known. This brings the chapter's inferential questions together:
+
+1. **Conditional expectation:** What is the expected *log price* at specified temperature, rainfall, and age?
+2. **Estimation:** How much do the estimated weather coefficients depend on which vintages happen to be in the sample?
+3. **Inference:** Are the estimated conditional associations distinguishable from zero under the assumed statistical model?
+4. **Prediction:** What is the difference between the uncertainty in a *mean* valuation and a *single* vintage's market outcome?
+5. **Adequacy:** Is the linear mean model plausible, and might serial dependence, omitted factors, or influential vintages distort inference?
+6. **Decision:** Could a wine buyer use the model to inform a valuation? Perhaps, but the historical regression by itself does not establish reliable future profit, a causal effect of weather, or validity under changing market conditions.
+
+Our aim is not to maximize $R^2$: it is to state a scientifically meaningful conditional expectation, estimate it from real observations, and explain exactly which uncertainty statements the assumptions justify.
+
+## Comparison with a more flexible method: nearest neighbors
+
+ISLP contrasts linear regression with $K$-nearest-neighbor (KNN) regression. The comparison becomes particularly clear from Chapter 1: both aim to estimate $m(x)=\mathbb E[Y\mid X=x]$, but they use different restrictions.
+
+- **Linear regression** estimates a small vector of coefficients under an affine (or chosen basis-expanded) mean specification.
+- **KNN regression** estimates $m(x_0)$ by averaging outcomes in a neighborhood of $x_0$. It does not impose a single global linear shape, but can be unstable with few nearby observations, sensitive to scaling, and difficult in high-dimensional predictor spaces.
+
+Neither is automatically better: a correct simple linear model can be statistically efficient; a flexible method may reduce bias when the conditional mean is complex, but introduce variance. **Comparisons must be based on new-data performance**, not training error. We study validation and this trade-off in the next chapter.
+
+# Computational lab: test a statistical claim
+
+We return to the Monte Carlo method from Chapter 2, but we must keep **real data** separate from an **assumed simulation mechanism**. There is no known true $\beta$ for Bordeaux vintages. To illustrate OLS sampling theory **conditionally on the observed design**, we construct a *hypothetical normal, homoskedastic linear world* whose parameters equal the fitted four-predictor values. This is a parametric thought experiment, **not** additional historical wine data, and it does not validate the assumptions for Bordeaux vintages.
+
+Fix $\mathbf X$ to the observed 27 vintages. In each replication, generate
+
+$$
+\mathbf Y^{(b)}=\mathbf X\beta^*+\boldsymbol\varepsilon^{(b)},\qquad
+\boldsymbol\varepsilon^{(b)}\sim N_{27}(0,(\sigma^*)^2\mathbf I),
+$$
+
+with $\beta^*=\widehat\beta_{\mathrm{wine}}$ and $\sigma^*=\widehat\sigma_{\mathrm{wine}}$. Under **this specified simulation**, $\beta_T^*$ is known, so we can check coverage and the variance formula exactly as in Chapter 2.
+
+::: {#cell-monte-carlo-regression-ch3 .cell execution_count=13}
+``` {.python .cell-code}
+B = 1000
+D = multiple.model.exog          # Real observed 27 x 5 design
+beta_star = np.asarray(multiple.params)  # Chosen parameters for this experiment
+sigma_star = np.sqrt(multiple.mse_resid)
+coef_draws = np.empty(B)
+se_draws = np.empty(B)
+covered = np.empty(B, dtype=bool)
+inv_DtD = np.linalg.inv(D.T @ D)
+k = D.shape[1]
+
+for b in range(B):
+    y_b = D @ beta_star + rng.normal(0, sigma_star, len(wine))
+    bhat = np.linalg.solve(D.T @ D, D.T @ y_b)
+    resid_b = y_b - D @ bhat
+    shat2 = (resid_b @ resid_b) / (len(wine) - k)
+    se_b = np.sqrt(shat2 * inv_DtD[1, 1])  # Column 1 is AGST
+    critical = stats.t.ppf(0.975, df=len(wine) - k)
+    coef_draws[b], se_draws[b] = bhat[1], se_b
+    covered[b] = abs(bhat[1] - beta_star[1]) <= critical * se_b
+
+print(pd.Series({
+    "simulation AGST coefficient": beta_star[1],
+    "mean simulated AGST estimate": coef_draws.mean(),
+    "Monte Carlo SD of estimates": coef_draws.std(ddof=1),
+    "mean reported SE": se_draws.mean(),
+    "95% interval coverage": covered.mean(),
+    "Monte Carlo SE of coverage": np.sqrt(covered.mean() * (1-covered.mean()) / B)
+}).round(4).to_string())
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.hist(coef_draws, bins=30, density=True, alpha=0.8)
+ax.axvline(beta_star[1], ls="--", color="black", label="Simulation coefficient")
+ax.set(xlabel="Fitted AGST coefficient (simulated samples)", ylabel="Density")
+ax.legend()
+plt.show()
+```
+
+::: {.cell-output .cell-output-stdout}
+```
+simulation AGST coefficient     0.6164
+mean simulated AGST estimate    0.6202
+Monte Carlo SD of estimates     0.0991
+mean reported SE                0.0942
+95% interval coverage           0.9390
+Monte Carlo SE of coverage      0.0076
+```
+:::
+
+::: {.cell-output .cell-output-display}
+![Conditional sampling distribution of the temperature coefficient in a hypothetical model calibrated to the real wine data. The dashed line is the simulation's chosen coefficient, not a known truth for Bordeaux.](CH3_files/figure-html/monte-carlo-regression-ch3-output-2.png){#monte-carlo-regression-ch3 width=576 height=356}
+:::
+:::
+
+
+**Interpretation:** The spread across simulated estimates is a sampling-distribution property of the *chosen* probability model. The average reported standard error approximates that spread, and the 95% confidence-interval procedure should cover the fixed **simulation parameter** about 95% of the time. None of these statements says the wine dataset actually satisfies independent, normal and homoskedastic errors.
+-->
+</section>
+</section>
+<section id="coding-lab-exercise" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Coding Lab exercise</h1>
+<!--
+1. **Population versus fitted mean.** Write the proposed $m(t,w,h,a)$ and identify the line that estimates its coefficients from historical observations. Why is $m$ unknown even after the regression is fitted?
+2. **One versus several predictors.** Compare `AGST` slopes in the simple and multiple models. Explain their different conditioning sets, rather than declaring one slope the "true effect".
+3. **Published replication.** Verify $\widehat\beta_T\approx0.61639$, $\widehat\beta_H\approx-0.003861$, $R^2\approx0.82753$ and $\widehat\sigma\approx0.2865$. Report the degrees of freedom used for the residual variance.
+4. **Inference.** Construct and interpret a 95% interval for the temperature slope; report what would need to be assumed for the classical $t$-distribution to justify its coverage.
+5. **Joint restrictions.** Test whether winter and harvest rainfall have zero coefficients together. Why is this not equivalent to simply checking two individual $p$-values?
+6. **Prediction.** Explain the mean-confidence and individual-prediction intervals for the hypothetical vintage. Why are they different, and why is exponentiating mean log price not automatically the expected price?
+7. **Robust inference and diagnostics.** Compare the conventional and HC3 standard errors and inspect the leverage plot. Can either check prove that 27 historical vintages are independent observations?
+8. **Simulation versus reality.** In the Monte Carlo exercise, which coefficients are genuinely known, and why? Change the simulated error variance to depend on `AGST`, then compare classical and HC3 intervals. Does that tell us the real vintage errors are heteroskedastic?
+-->
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
